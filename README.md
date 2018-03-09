@@ -1,2 +1,2 @@
 # thread-safe-collections
-Thread safe collections examples
+Thread safe java collections examples
