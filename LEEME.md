@@ -48,7 +48,7 @@ Ver lista de [contribuyentes] (https://github.com/cazucito/thread-safe-collectio
 
 ## LICENCIA
 
-Este proyecto esta bajo licencia GNU General Public License v3.0 - ver el archivo [LICENSE.md](LICENSE.md) para detalles.
+Este proyecto esta bajo licencia GNU General Public License v3.0 - ver el archivo [LICENSE](LICENSE) para detalles.
 
 ## AGRADECIMIENTOS
 
