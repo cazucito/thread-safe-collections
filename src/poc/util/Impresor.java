@@ -18,17 +18,39 @@ public class Impresor {
 		try {
 			System.out.print("\t< ");
 			for (String str : coleccion) {
-				System.out.print(str + " ");
+				System.out.println("\\t" + str);
 				// "Pausa" el hilo un lapso de 0-200 milisegundos
 				try {
 					Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
 				} catch (Exception ex) {
-					System.out.println("\tEX: " + ex.getMessage());
+					System.out.println("\t\tEX: " + ex.getMessage());
 				}
 			}
-			System.out.println(">");
+			System.out.println("\\t>");
 		} catch (Exception ex) {
-			System.out.println("\tEx: " + ex);
+			System.out.println("\t\tEx: " + ex);
+		}
+	}
+	/**
+	 * Manda a imprimir un mapa
+	 * 
+	 * @param mapa
+	 */
+	public static void imprime(Map<Integer, String> mapa) {
+		try {
+			System.out.println("\t< ");
+			for (Integer k : mapa.keySet()) {
+				System.out.println("\t\t" + k + "/" + mapa.get(k) + " ");
+				// "Pausa" el hilo un lapso de 0-200 milisegundos
+				try {
+					Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+				} catch (Exception ex) {
+					System.out.println("\t\tEX: " + ex.getMessage());
+				}
+			}
+			System.out.println("\t>");
+		} catch (Exception ex) {
+			System.out.println("\t\tEx: " + ex);
 		}
 	}
 	/**
