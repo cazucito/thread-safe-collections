@@ -3,6 +3,7 @@
  */
 package poc;
 
+import poc.cc.ConcurrentHashMapDemo;
 import poc.cc.ConcurrentSkipListMapDemo;
 import poc.cc.ConcurrentSkipListSetDemo;
 import poc.cc.CopyOnWriteArrayListDemo;
@@ -28,8 +29,11 @@ public class TSCMain {
 //		ConcurrentSkipListSetDemo.testConstructores();
 //		ConcurrentSkipListSetDemo.testConcurrentSkipListSet();
 		// ConcurrentSkipListMapDemo
-		ConcurrentSkipListMapDemo.testConstructores();
-		ConcurrentSkipListMapDemo.testConcurrentSkipListMap();
+//		ConcurrentSkipListMapDemo.testConstructores();
+//		ConcurrentSkipListMapDemo.testConcurrentSkipListMap();
+		// ConcurrentHashMapDemo
+		ConcurrentHashMapDemo.testConstructores();
+		ConcurrentHashMapDemo.testConcurrentHashMap();
 	}
 
 }
