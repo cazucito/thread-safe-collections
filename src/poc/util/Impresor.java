@@ -1,6 +1,7 @@
 package poc.util;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 /**
  * Utilería para la impresión de colecciones
@@ -29,5 +30,21 @@ public class Impresor {
 		} catch (Exception ex) {
 			System.out.println("\tEx: " + ex);
 		}
+	}
+	/**
+	 * Manda a imprimir una colección mediante el llamado a so método toString()
+	 * 
+	 * @param coleccion
+	 */
+	public static void imprimeToString(Collection coleccion) {
+		System.out.println("\t- Tamaño:" + coleccion.size() + " Datos: " + coleccion.toString());
+	}
+	/**
+	 * Manda a imprimir un mapa mediante el llamado a so método toString()
+	 * 
+	 * @param Mapa
+	 */
+	public static void imprimeToString(Map mapa) {
+		System.out.println("\t- Tamaño:" + mapa.size() + " Datos: " + mapa.toString());
 	}
 }
