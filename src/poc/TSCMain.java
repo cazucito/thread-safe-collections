@@ -3,6 +3,7 @@
  */
 package poc;
 
+import poc.cc.ConcurrentSkipListSetDemo;
 import poc.cc.CopyOnWriteArrayListDemo;
 import poc.cc.CopyOnWriteArraySetDemo;
 
@@ -22,6 +23,9 @@ public class TSCMain {
 		// CopyOnWriteArraySet
 		CopyOnWriteArraySetDemo.testConstructores();
 		CopyOnWriteArraySetDemo.testCopyOnWriteArraySet();
+		// ConcurrentSkipListSet
+		ConcurrentSkipListSetDemo.testConstructores();
+		ConcurrentSkipListSetDemo.testConcurrentSkipListSet();
 
 	}
 
