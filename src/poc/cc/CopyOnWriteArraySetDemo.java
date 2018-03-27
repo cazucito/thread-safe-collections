@@ -2,7 +2,9 @@ package poc.cc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -69,9 +71,9 @@ public class CopyOnWriteArraySetDemo {
 		/////////////////
 		// Piscina de hilos
 		ExecutorService hilos = Executors.newCachedThreadPool();
-		// ArrayList
-		System.out.println("||=== ArrayList ===||");
-		final ArrayList<String> numeros = new ArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
+		// HashSet
+		System.out.println("||=== HashSet ===||");
+		final Set<String> numeros = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		numeros.add("Tres");
 		hilos.execute(new ModificadorDeColeccion(numeros, "CUATRO"));
 		Impresor.imprime(numeros);
