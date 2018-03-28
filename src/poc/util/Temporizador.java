@@ -1,6 +1,5 @@
 package poc.util;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -35,7 +34,7 @@ public class Temporizador {
 	 */
 	public static void pausar(int msMin, int msMax) {
 		try {
-			Thread.sleep(ThreadLocalRandom.current().nextLong(msMin, msMax));
+			Thread.sleep(ThreadLocalRandom.current().nextInt(msMin, msMax));
 		} catch (Exception ex) {
 			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
 		}
