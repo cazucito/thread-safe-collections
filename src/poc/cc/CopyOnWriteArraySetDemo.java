@@ -74,23 +74,25 @@ public class CopyOnWriteArraySetDemo {
 	 */
 	public static void testCopyOnWriteArraySet() {
 		/////////////////
-		// Piscina de hilos
-		ExecutorService hilos = Executors.newCachedThreadPool();
 		// HashSet
 		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "HashSet - FAIL-FAST");
 		final Set<String> hs01 = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		hs01.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(hs01, "CUATRO"));
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, ".add(\"Tres\") no altera la coleccion");
+		ExecutorService hilos1 = Executors.newCachedThreadPool();
+		hilos1.execute(new AdicionadorAColeccionNoSincronizado(hs01, "CUATRO"));
+		hilos1.shutdown();
 		Impresor.imprime(hs01);
-		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + hs01.toString());
 		// CopyOnWriteArrayList
 		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CopyOnWriteArraySet - FAIL-SAFE");
 		final CopyOnWriteArraySet<String> cowas01 = new CopyOnWriteArraySet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		cowas01.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(cowas01, "CUATRO"));
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, ".add(\"Tres\") no altera la coleccion");
+		ExecutorService hilos2 = Executors.newCachedThreadPool();
+		hilos2.execute(new AdicionadorAColeccionNoSincronizado(cowas01, "CUATRO"));
+		hilos2.shutdown();
 		Impresor.imprime(cowas01);
-		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "Estado final: " + cowas01.toString());
 	}
 

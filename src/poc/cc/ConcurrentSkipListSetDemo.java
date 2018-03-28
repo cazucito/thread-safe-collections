@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
+import poc.util.TipoMensajes;
 import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
@@ -63,14 +64,14 @@ public class ConcurrentSkipListSetDemo {
 	public static void testConstructores() {
 		/////////////////
 		// CONSTRUCTORES
-		System.out.println("||=== CONSTRUCTORES ConcurrentSkipListSet() ===||");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CONSTRUCTORES");
 		// ConcurrentSkipListSet() => Constructs a new, empty set that orders its
 		// elements according to their natural ordering.
-		ConcurrentSkipListSet<String> cowal01 = new ConcurrentSkipListSet<>();
-		cowal01.add("Uno");
-		cowal01.add("Dos");
-		cowal01.add("Tres");
-		System.out.println(cowal01);
+		ConcurrentSkipListSet<String> csls01 = new ConcurrentSkipListSet<>();
+		csls01.add("Uno");
+		csls01.add("Dos");
+		csls01.add("Tres");
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, csls01.toString());
 		// ConcurrentSkipListSet(Collection<? extends E> c) => Constructs a new set
 		// containing the elements in the specified collection, that orders its elements
 		// according to their natural ordering.
@@ -78,46 +79,54 @@ public class ConcurrentSkipListSetDemo {
 		coleccion.add("Uno");
 		coleccion.add("Dos");
 		coleccion.add("Tres");
-		NavigableSet<String> cowal02 = new ConcurrentSkipListSet<>(coleccion);
-		System.out.println(cowal02);
+		NavigableSet<String> csls02 = new ConcurrentSkipListSet<>(coleccion);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, csls02.toString());
 		// ConcurrentSkipListSet(Comparator<? super E> comparator) => Constructs a new,
 		// empty set that orders its elements according to the specified comparator.
 		Comparator<String> comparator = (str1, str2) -> (str1.length() > str2.length()) ? 1
 				: (str1.length() == str2.length()) ? 0 : -1;
-		NavigableSet<String> cowal03 = new ConcurrentSkipListSet<>(comparator);
-		cowal03.add("4444");
-		cowal03.add("333");
-		cowal03.add("55555");
-		cowal03.add("22");cowal03.add("22");
-		System.out.println(cowal03);
-		// ConcurrentSkipListSet(SortedSet<E> s) => Constructs a new set containing the same elements and using the same ordering as the specified sorted set.
+		NavigableSet<String> csls03 = new ConcurrentSkipListSet<>(comparator);
+		csls03.add("4444");
+		csls03.add("333");
+		csls03.add("55555");
+		csls03.add("22");
+		csls03.add("22");
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, csls03.toString());
+		// ConcurrentSkipListSet(SortedSet<E> s) => Constructs a new set containing the
+		// same elements and using the same ordering as the specified sorted set.
 		SortedSet<String> coleccion2 = new TreeSet<>();
 		coleccion2.add("Uno");
 		coleccion2.add("Dos");
-		coleccion2.add("Tres");coleccion2.add("Tres");
-		ConcurrentSkipListSet<String> cowal04 = new ConcurrentSkipListSet<>(coleccion2);
-		System.out.println(cowal04);
+		coleccion2.add("Tres");
+		coleccion2.add("Tres");
+		ConcurrentSkipListSet<String> csls04 = new ConcurrentSkipListSet<>(coleccion2);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, csls04.toString());
 	}
 
 	/**
 	 * Prueba ConcurrentSkipListSet
 	 */
 	public static void testConcurrentSkipListSet() {
-		/////////////////
-		// Piscina de hilos
-		ExecutorService hilos = Executors.newCachedThreadPool();
 		// SortedSet
-		System.out.println("||=== SortedSet ===||");
-		final SortedSet<String> numeros = new TreeSet<>(Arrays.asList("Uno", "Dos", "Tres"));
-		numeros.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
-		Impresor.imprime(numeros);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "SortedSet - FAIL-FAST");
+		final SortedSet<String> ts = new TreeSet<>(Arrays.asList("Uno", "Dos", "Tres"));
+		ts.add("Tres");
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, ".add(\"Tres\") no altera la coleccion");
+		ExecutorService hilos1 = Executors.newCachedThreadPool();
+		hilos1.execute(new AdicionadorAColeccionNoSincronizado(ts, "CUATRO"));
+		hilos1.shutdown();
+		Impresor.imprime(ts);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + ts.toString());
 		// CopyOnWriteArrayList
-		System.out.println("||=== ConcurrentSkipListSet ===||");
-		final ConcurrentSkipListSet<String> numeros2 = new ConcurrentSkipListSet<>(Arrays.asList("Uno", "Dos", "Tres"));
-		numeros2.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
-		Impresor.imprime(numeros2);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ConcurrentSkipListSet - FAIL-SAFE");
+		final ConcurrentSkipListSet<String> csls = new ConcurrentSkipListSet<>(Arrays.asList("Uno", "Dos", "Tres"));
+		csls.add("Tres");
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, ".add(\"Tres\") no altera la coleccion");
+		ExecutorService hilos2 = Executors.newCachedThreadPool();
+		hilos2.execute(new AdicionadorAColeccionNoSincronizado(csls, "CUATRO"));
+		hilos2.shutdown();
+		Impresor.imprime(csls);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + csls.toString());
 	}
 
 }

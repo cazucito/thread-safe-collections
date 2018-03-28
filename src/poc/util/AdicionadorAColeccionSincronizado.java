@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author cazucito
  *
  */
-public class AdicionadorAColeccionSincronizado implements Callable<Collection<String>> {
+public class AdicionadorAColeccionSincronizado implements Runnable {
 	private Collection<String> coleccion;
 	private String dato;
 
@@ -18,20 +18,24 @@ public class AdicionadorAColeccionSincronizado implements Callable<Collection<St
 		this.coleccion = coleccion;
 		this.dato = dato;
 	}
-
+	/**
+	 * Adiciona (de manera sincronizada) un elemento a la colección 
+	 */
 	@Override
-	public Collection<String> call() {
+	public void run() {
+		String colStr = "[]";
 		try {
 			synchronized (coleccion) {
-				Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+				Temporizador.pausar(100);
 				coleccion.add(dato);
+				colStr = coleccion.toString();
 			}
 		} catch (Exception ex) {
 			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
 		} finally {
-			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION,
+					"adición de '" + dato + "' a la colección: " + colStr);
 		}
-		return coleccion;
 	}
 
 }

@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
+import poc.util.Temporizador;
+import poc.util.TipoMensajes;
 import poc.util.AdicionadorAMapaNoSincronizado;
 
 /**
@@ -63,14 +65,14 @@ public class ConcurrentSkipListMapDemo {
 	public static void testConstructores() {
 		/////////////////
 		// CONSTRUCTORES
-		System.out.println("||=== CONSTRUCTORES ConcurrentSkipListMap() ===||");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CONSTRUCTORES");
 		// ConcurrentSkipListMap() => Constructs a new, empty map, sorted according to
 		// the natural ordering of the keys.
 		ConcurrentNavigableMap<Integer, String> cslm1 = new ConcurrentSkipListMap<>();
 		cslm1.put(1, "UNO");
 		cslm1.put(2, "DOS");
 		cslm1.put(3, "TRES");
-		Impresor.imprimeToString(cslm1);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cslm1.toString());
 		// ConcurrentSkipListMap(Comparator<? super K> comparator) => Constructs a new,
 		// empty map, sorted according to the specified comparator.
 		Comparator<Integer> comparator = (k1, k2) -> (k1 > k2) ? -1 : (k1 == k2) ? 0 : 1;
@@ -78,7 +80,7 @@ public class ConcurrentSkipListMapDemo {
 		cslm2.put(1, "UNO");
 		cslm2.put(2, "DOS");
 		cslm2.put(3, "TRES");
-		Impresor.imprimeToString(cslm2);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cslm2.toString());
 		// ConcurrentSkipListMap(Map<? extends K,? extends V> m) => Constructs a new map
 		// containing the same mappings as the given map, sorted according to the
 		// natural ordering of the keys.
@@ -87,7 +89,7 @@ public class ConcurrentSkipListMapDemo {
 		datos1.put(2, "DOS");
 		datos1.put(3, "TRES");
 		ConcurrentNavigableMap<Integer, String> cslm3 = new ConcurrentSkipListMap<>(datos1);
-		Impresor.imprimeToString(cslm3);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cslm3.toString());
 		// ConcurrentSkipListMap(SortedMap<K,? extends V> m) => Constructs a new map
 		// containing the same mappings and using the same ordering as the specified
 		// sorted map.
@@ -98,7 +100,7 @@ public class ConcurrentSkipListMapDemo {
 		datos2.put(3, "TRES");
 		datos2.put(4, "CUATRO");
 		ConcurrentNavigableMap<Integer, String> cslm4 = new ConcurrentSkipListMap<>(datos2);
-		Impresor.imprimeToString(cslm4);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cslm4.toString());
 
 	}
 
@@ -106,27 +108,27 @@ public class ConcurrentSkipListMapDemo {
 	 * Prueba ConcurrentSkipListSet
 	 */
 	public static void testConcurrentSkipListMap() {
-		/////////////////
-		// Piscina de hilos
-		ExecutorService hilos = Executors.newCachedThreadPool();
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "TreeMap - FAIL-FAST");
 		// TreeMap
-		System.out.println("||=== TreeMap ===||");
 		final Map<Integer, String> mapa = new TreeMap<>();
 		mapa.put(1, "UNO");
 		mapa.put(2, "DOS");
 		mapa.put(3, "TRES");
-		Impresor.imprimeToString(mapa);
-		hilos.execute(new AdicionadorAMapaNoSincronizado(mapa, 4, "CUATRO"));
+		ExecutorService hilos1 = Executors.newCachedThreadPool();
+		hilos1.execute(new AdicionadorAMapaNoSincronizado(mapa, 4, "CUATRO"));
+		hilos1.shutdown();
 		Impresor.imprime(mapa);
-		// CopyOnWriteArrayList
-		System.out.println("||=== ConcurrentSkipListMap ===||");
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + mapa.toString());
+		// ConcurrentSkipListMap
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ConcurrentSkipListMap - FAIL-SAFE");
 		ConcurrentNavigableMap<Integer, String> cslm = new ConcurrentSkipListMap<>();
 		cslm.put(1, "UNO");
 		cslm.put(2, "DOS");
 		cslm.put(3, "TRES");
-		Impresor.imprimeToString(cslm);
-		hilos.execute(new AdicionadorAMapaNoSincronizado(cslm, 4, "CUATRO"));
+		ExecutorService hilos2 = Executors.newCachedThreadPool();
+		hilos2.execute(new AdicionadorAMapaNoSincronizado(cslm, 4, "CUATRO"));
 		Impresor.imprime(cslm);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + cslm.toString());
 	}
 
 }

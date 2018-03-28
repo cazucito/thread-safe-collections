@@ -19,6 +19,9 @@ public class AdicionadorAColeccionNoSincronizado implements Runnable {
 		this.dato = dato;
 	}
 
+	/**
+	 * Adiciona (de manera no sincronizada) un elemento a la colección 
+	 */
 	@Override
 	public void run() {
 		String colStr = "[]";

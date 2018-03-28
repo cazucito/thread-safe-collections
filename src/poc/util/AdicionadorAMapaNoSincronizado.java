@@ -21,13 +21,15 @@ public class AdicionadorAMapaNoSincronizado implements Runnable {
 
 	@Override
 	public void run() {
+		String mapStr = "[]";
 		try {
-			Temporizador.pausar(0, 5000);
+			Temporizador.pausar(1);
 			mapa.put(llave, valor);
+			mapStr = mapa.toString();
 		} catch (Exception ex) {
 			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
 		} finally {
-			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + llave + "/" + valor + "' al mapa: " + mapa.toString());
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + llave + "/" + valor + "' al mapa: " + mapStr);
 		}
 	}
 

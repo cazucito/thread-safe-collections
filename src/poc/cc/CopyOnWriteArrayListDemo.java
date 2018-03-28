@@ -77,20 +77,21 @@ public class CopyOnWriteArrayListDemo {
 	 * Prueba CopyOnWriteArrayList
 	 */
 	public static void testCopyOnWriteArrayList() {
-		ExecutorService hilos = Executors.newCachedThreadPool();
 		// ArrayList
 		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ArrayList - FAIL-FAST");
 		final ArrayList<String> al01 = new ArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(al01, "CUATRO"));
+		ExecutorService hilos1 = Executors.newCachedThreadPool();
+		hilos1.execute(new AdicionadorAColeccionNoSincronizado(al01, "CUATRO"));
+		hilos1.shutdown();
 		Impresor.imprime(al01);
-		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + al01.toString());
 		// CopyOnWriteArrayList
 		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CopyOnWriteArrayList - FAIL-SAFE");
 		final CopyOnWriteArrayList<String> cowal01 = new CopyOnWriteArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(cowal01, "CUATRO"));
+		ExecutorService hilos2 = Executors.newCachedThreadPool();
+		hilos2.execute(new AdicionadorAColeccionNoSincronizado(cowal01, "CUATRO"));
+		hilos2.shutdown();
 		Impresor.imprime(cowal01);
-		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + cowal01.toString());
 	}
 }

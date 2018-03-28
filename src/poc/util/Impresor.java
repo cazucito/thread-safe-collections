@@ -18,8 +18,8 @@ public class Impresor {
 
 	private final static String formatoEncabezado = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
 	private final static String formatoPie = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
-	private final static String formatoTitulo = "||:::::::| :::::::%62s ||%n";
-	private final static String formatoSubtitulo = "         | -------%62s  |%n";
+	private final static String formatoTitulo = "||:::::::| :::::::::::::::%54s ||%n";
+	private final static String formatoSubtitulo = "         | ---------------%54s  |%n";
 	private final static String formatoMensaje = "         | %-70s |%n";
 	private final static String formatoInfo = "     info| %-70s  |%n";
 	private final static String formatoErrorLogico = "      bug| %-70s |%n";
@@ -83,35 +83,17 @@ public class Impresor {
 	public static void imprime(Map<Integer, String> mapa) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			sb.append("< ");
+			sb.append("<");
 			for (Integer k : mapa.keySet()) {
-				sb.append(k + "/" + mapa.get(k) + " ");
+				sb.append(" " + k + "/" + mapa.get(k));
 				Temporizador.pausar(100);
 			}
-			System.out.println("\t>");
+			sb.append(" >");
 		} catch (Exception ex) {
 			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
 		} finally {
 			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "finally: " + sb.toString());
 		}
-	}
-
-	/**
-	 * Manda a imprimir una colección mediante el llamado a so método toString()
-	 * 
-	 * @param coleccion
-	 */
-	public static void imprimeToString(Collection coleccion) {
-		System.out.println("\t- Tamaño:" + coleccion.size() + " Datos: " + coleccion.toString());
-	}
-
-	/**
-	 * Manda a imprimir un mapa mediante el llamado a so método toString()
-	 * 
-	 * @param Mapa
-	 */
-	public static void imprimeToString(Map mapa) {
-		System.out.println("\t- Tamaño:" + mapa.size() + " Datos: " + mapa.toString());
 	}
 
 	/**
@@ -129,7 +111,7 @@ public class Impresor {
 		case PIE:
 			msj.add("=====================================================================");
 			msj.add(0, "---------------------------------------------------------------------");
-			msj.set(1, "" + LocalDate.now().getYear());
+			msj.set(1, "Java " + System.getProperty("java.version") + " | " + LocalDate.now().getYear());
 			tipoMensaje = formatoPie;
 			break;
 		case TITULO:
