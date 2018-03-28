@@ -15,33 +15,37 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  */
 public class Impresor {
-	
+
 	private final static String formatoEncabezado = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
 	private final static String formatoPie = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
-	private final static String formatoTitulo = "||:::::::|%70s ||%n";
-	private final static String formatoSubtitulo = "         |%70s  |%n";
-	private final static String formatoMensaje = "         | %-70s  |%n";
+	private final static String formatoTitulo = "||:::::::| :::::::%62s ||%n";
+	private final static String formatoSubtitulo = "         | -------%62s  |%n";
+	private final static String formatoMensaje = "         | %-70s |%n";
 	private final static String formatoInfo = "     info| %-70s  |%n";
 	private final static String formatoErrorLogico = "      bug| %-70s |%n";
 	private final static String formatoMensajeOK = "       ok| %-70s |%n";
-	private final static String formatoExcepcion = "       ex| %-70s  |%n";
+	private final static String formatoExcepcion = "       ex| %-70s |%n";
 	private final static String formatoError = "    error| %-70s  |%n";
 	private final static String formatoDepuracion = "    debug| %-70s |%n";
 	private static boolean depuracion = false;
+
 	/**
 	 * Habilita mensajes de depuración
 	 */
 	public static void habilitaDepuracion() {
 		Impresor.depuracion = true;
 	}
+
 	/**
 	 * Deshabilita mensajes de depuración
 	 */
 	public static void deshabilitaDepuracion() {
 		Impresor.depuracion = false;
 	}
+
 	/**
 	 * Bandera para indicar está en modo de depuración
+	 * 
 	 * @return
 	 */
 	public static boolean isDepuracion() {
@@ -51,46 +55,44 @@ public class Impresor {
 	/**
 	 * Imprime una colección de referencias a objetos tipo String
 	 * 
-	 * @param coleccion La colección a imprimir
+	 * @param coleccion
+	 *            La colección a imprimir
 	 */
 	public static void imprime(Collection<String> coleccion) {
+		StringBuilder sb = new StringBuilder();
 		try {
-			System.out.print("\t< ");
+			sb.append("<");
 			for (String str : coleccion) {
-				System.out.println("\t" + str);
-				// "Pausa" el hilo un lapso de 0-200 milisegundos
-				try {
-					Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
-				} catch (Exception ex) {
-					System.out.println("\t\tEX: " + ex.getMessage());
-				}
+				sb.append(" " + str);
+				Temporizador.pausar(500);
 			}
-			System.out.println("\t>");
+			sb.append(" >");
 		} catch (Exception ex) {
-			System.out.println("\t\tEx: " + ex);
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
+		} finally {
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "finally: " + sb.toString());
 		}
 	}
 
 	/**
 	 * Imprime un mapa de Integer / String
 	 * 
-	 * @param mapa El mapa a imprimir
+	 * @param mapa
+	 *            El mapa a imprimir
 	 */
 	public static void imprime(Map<Integer, String> mapa) {
+		StringBuilder sb = new StringBuilder();
 		try {
-			System.out.println("\t< ");
+			sb.append("< ");
 			for (Integer k : mapa.keySet()) {
-				System.out.println("\t\t" + k + "/" + mapa.get(k) + " ");
-				// "Pausa" el hilo un lapso de 0-200 milisegundos
-				try {
-					Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
-				} catch (Exception ex) {
-					System.out.println("\t\tEX: " + ex.getMessage());
-				}
+				sb.append(k + "/" + mapa.get(k) + " ");
+				Temporizador.pausar(500);
 			}
 			System.out.println("\t>");
 		} catch (Exception ex) {
-			System.out.println("\t\tEx: " + ex);
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
+		} finally {
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "finally: " + sb.toString());
 		}
 	}
 
@@ -156,7 +158,7 @@ public class Impresor {
 			break;
 		case DEPURACION:
 			tipoMensaje = formatoDepuracion;
-			if(!depuracion) {
+			if (!depuracion) {
 				return;
 			}
 			break;
