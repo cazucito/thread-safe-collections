@@ -29,22 +29,27 @@ public class TSCMain {
 		GestorDeColecciones.adicionNoSincronizada();
 		GestorDeColecciones.adicionSincronizada();
 		GestorDeColecciones.adicionSincronizadaUtileria();
-		// CopyOnWriteArrayList
-//		CopyOnWriteArrayListDemo.testConstructores();
-//		CopyOnWriteArrayListDemo.testCopyOnWriteArrayList();
+//		// CopyOnWriteArrayList
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "CopyOnWriteArrayList (java.util.concurrent)");
+		CopyOnWriteArrayListDemo.testConstructores();
+		CopyOnWriteArrayListDemo.testCopyOnWriteArrayList();
 //		// CopyOnWriteArraySet
-//		CopyOnWriteArraySetDemo.testConstructores();
-//		CopyOnWriteArraySetDemo.testCopyOnWriteArraySet();
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "CopyOnWriteArraySet (java.util.concurrent)");
+		CopyOnWriteArraySetDemo.testConstructores();
+		CopyOnWriteArraySetDemo.testCopyOnWriteArraySet();
 //		// ConcurrentSkipListSet
-//		ConcurrentSkipListSetDemo.testConstructores();
-//		ConcurrentSkipListSetDemo.testConcurrentSkipListSet();
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "ConcurrentSkipListSet (java.util.concurrent)");
+		ConcurrentSkipListSetDemo.testConstructores();
+		ConcurrentSkipListSetDemo.testConcurrentSkipListSet();
 		// ConcurrentSkipListMapDemo
-//		ConcurrentSkipListMapDemo.testConstructores();
-//		ConcurrentSkipListMapDemo.testConcurrentSkipListMap();
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "ConcurrentSkipListMap (java.util.concurrent)");
+		ConcurrentSkipListMapDemo.testConstructores();
+		ConcurrentSkipListMapDemo.testConcurrentSkipListMap();
 		// ConcurrentHashMapDemo
-//		ConcurrentHashMapDemo.testConstructores();
-//		ConcurrentHashMapDemo.testConcurrentHashMap();
-
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "ConcurrentHashMapDemo (java.util.concurrent)");
+		ConcurrentHashMapDemo.testConstructores();
+		ConcurrentHashMapDemo.testConcurrentHashMap();
+		//
 		Impresor.muestraEnConsola(TipoMensajes.PIE, "");
 	}
 
