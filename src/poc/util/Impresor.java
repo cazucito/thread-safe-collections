@@ -115,7 +115,7 @@ public class Impresor {
 	/**
 	 * 
 	 */
-	public static void muestraEnConsola(FormatoMensajes _tipoMensaje, String... mensajes) {
+	public static void muestraEnConsola(TipoMensajes _tipoMensaje, String... mensajes) {
 		String tipoMensaje = "";
 		List<String> msj = new ArrayList<String>(Arrays.asList(mensajes));
 		switch (_tipoMensaje) {

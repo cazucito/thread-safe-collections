@@ -9,7 +9,7 @@ import poc.cc.ConcurrentSkipListSetDemo;
 import poc.cc.CopyOnWriteArrayListDemo;
 import poc.cc.CopyOnWriteArraySetDemo;
 import poc.cnc.GestorDeColecciones;
-import poc.util.FormatoMensajes;
+import poc.util.TipoMensajes;
 import poc.util.Impresor;
 
 /**
@@ -23,9 +23,9 @@ public class TSCMain {
 	 */
 	public static void main(String[] args) {
 		Impresor.habilitaDepuracion();
-		Impresor.muestraEnConsola(FormatoMensajes.ENCABEZADO, "COLECCIONES SEGURAS EN AMBIENTES MULTIHILOS");
+		Impresor.muestraEnConsola(TipoMensajes.ENCABEZADO, "COLECCIONES SEGURAS EN AMBIENTES MULTIHILOS");
 		// GestorColeccionNoSincronizada
-		Impresor.muestraEnConsola(FormatoMensajes.TITULO, "COLECCIONES (java.util)");
+		Impresor.muestraEnConsola(TipoMensajes.TITULO, "COLECCIONES (java.util)");
 		GestorDeColecciones.adicionNoSincronizada();
 		GestorDeColecciones.adicionSincronizada();
 		GestorDeColecciones.adicionSincronizadaUtileria();
@@ -45,7 +45,7 @@ public class TSCMain {
 //		ConcurrentHashMapDemo.testConstructores();
 //		ConcurrentHashMapDemo.testConcurrentHashMap();
 
-		Impresor.muestraEnConsola(FormatoMensajes.PIE, "");
+		Impresor.muestraEnConsola(TipoMensajes.PIE, "");
 	}
 
 }

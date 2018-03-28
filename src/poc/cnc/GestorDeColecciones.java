@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 
-import poc.util.FormatoMensajes;
+import poc.util.TipoMensajes;
 import poc.util.Impresor;
 import poc.util.ModificadorDeColeccion;
 import poc.util.ModificadorDeColeccionNoSynchronized;
@@ -20,29 +20,29 @@ import poc.util.Temporizador;
 public class GestorDeColecciones {
 
 	public static void adicionNoSincronizada() {
-		Impresor.muestraEnConsola(FormatoMensajes.SUBTITULO, "ArrayList - No sincronizado");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ArrayList - No sincronizado");
 		List<String> coleccion = new ArrayList<>();
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		for (int i = 1; i <= 10; i++) {
 			Future<Collection<String>> res = hilos.submit(new ModificadorDeColeccionNoSynchronized(coleccion, " " + i));
 		}
 		Temporizador.pausar(500);
-		Impresor.muestraEnConsola(FormatoMensajes.ERROR_LOGICO, "10 " + '\u2260' + " " + coleccion.size());
+		Impresor.muestraEnConsola(TipoMensajes.ERROR_LOGICO, "10 " + '\u2260' + " " + coleccion.size());
 	}
 
 	public static void adicionSincronizada() {
-		Impresor.muestraEnConsola(FormatoMensajes.SUBTITULO, "ArrayList - synchronized");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ArrayList - synchronized");
 		List<String> coleccion = new ArrayList<>();
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		for (int i = 1; i <= 10; i++) {
 			hilos.execute(new ModificadorDeColeccion(coleccion, "x"));
 		}
 		Temporizador.pausar(500);
-		Impresor.muestraEnConsola(FormatoMensajes.MENSAJE_OK, "10 = " + coleccion.size());
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, "10 = " + coleccion.size());
 	}
 
 	public static void adicionSincronizadaUtileria() {
-		Impresor.muestraEnConsola(FormatoMensajes.SUBTITULO, "ArrayList - Collections.synchronizedList()");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ArrayList - Collections.synchronizedList()");
 		List<String> coleccion = new ArrayList<>();
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		coleccion = Collections.synchronizedList(coleccion);
@@ -50,6 +50,6 @@ public class GestorDeColecciones {
 			Future<Collection<String>> res = hilos.submit(new ModificadorDeColeccionNoSynchronized(coleccion, " " + i));
 		}
 		Temporizador.pausar(500);
-		Impresor.muestraEnConsola(FormatoMensajes.MENSAJE_OK, "10 = " + coleccion.size());
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, "10 = " + coleccion.size());
 	}
 }

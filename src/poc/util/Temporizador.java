@@ -14,7 +14,7 @@ public class Temporizador {
 		try {
 			Thread.sleep(millisegundos);
 		} catch (Exception ex) {
-			Impresor.muestraEnConsola(FormatoMensajes.EXCEPCION, ex.getMessage());
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.getMessage());
 		}
 	}
 }

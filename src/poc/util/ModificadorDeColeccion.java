@@ -25,9 +25,9 @@ public class ModificadorDeColeccion implements Runnable {
 			// "Pausa" el hilo un lapso de 0-200 milisegundos
 			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
 			coleccion.add(dato);
-			Impresor.muestraEnConsola(FormatoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
 		} catch (Exception ex) {
-			Impresor.muestraEnConsola(FormatoMensajes.EXCEPCION, ex.getMessage());
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.getMessage());
 		}
 
 	}
