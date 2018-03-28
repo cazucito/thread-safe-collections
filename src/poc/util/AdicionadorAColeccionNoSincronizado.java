@@ -21,13 +21,15 @@ public class AdicionadorAColeccionNoSincronizado implements Runnable {
 
 	@Override
 	public void run() {
+		String colStr = "[]";
 		try {
-			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+			Temporizador.pausar(100);
 			coleccion.add(dato);
+			colStr = coleccion.toString();
 		} catch (Exception ex) {
 			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
 		} finally {
-			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + colStr);
 		}
 
 	}
