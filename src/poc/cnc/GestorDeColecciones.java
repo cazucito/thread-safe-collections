@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import poc.util.TipoMensajes;
 import poc.util.Impresor;
 import poc.util.AdicionadorAColeccionNoSincronizado;
-import poc.util.ModificadorDeColeccionNoSynchronized;
+import poc.util.AdicionadorAColeccionSincronizado;
 import poc.util.Temporizador;
 
 public class GestorDeColecciones {
@@ -24,7 +24,7 @@ public class GestorDeColecciones {
 		List<String> coleccion = new ArrayList<>();
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		for (int i = 1; i <= 10; i++) {
-			Future<Collection<String>> res = hilos.submit(new ModificadorDeColeccionNoSynchronized(coleccion, " " + i));
+			Future<Collection<String>> res = hilos.submit(new AdicionadorAColeccionSincronizado(coleccion, " " + i));
 		}
 		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.ERROR_LOGICO, "10 " + '\u2260' + " " + coleccion.size());
@@ -47,7 +47,7 @@ public class GestorDeColecciones {
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		coleccion = Collections.synchronizedList(coleccion);
 		for (int i = 1; i <= 10; i++) {
-			Future<Collection<String>> res = hilos.submit(new ModificadorDeColeccionNoSynchronized(coleccion, " " + i));
+			Future<Collection<String>> res = hilos.submit(new AdicionadorAColeccionSincronizado(coleccion, " " + i));
 		}
 		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, "10 = " + coleccion.size());
