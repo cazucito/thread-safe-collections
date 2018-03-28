@@ -25,7 +25,7 @@ public class Impresor {
 	private final static String formatoErrorLogico = "      bug| %-70s |%n";
 	private final static String formatoMensajeOK = "       ok| %-70s |%n";
 	private final static String formatoExcepcion = "       ex| %-70s |%n";
-	private final static String formatoError = "    error| %-70s  |%n";
+	private final static String formatoError = "    error| %-70s |%n";
 	private final static String formatoDepuracion = "    debug| %-70s |%n";
 	private static boolean depuracion = false;
 
@@ -64,7 +64,7 @@ public class Impresor {
 			sb.append("<");
 			for (String str : coleccion) {
 				sb.append(" " + str);
-				Temporizador.pausar(500);
+				Temporizador.pausar(100);
 			}
 			sb.append(" >");
 		} catch (Exception ex) {
@@ -86,7 +86,7 @@ public class Impresor {
 			sb.append("< ");
 			for (Integer k : mapa.keySet()) {
 				sb.append(k + "/" + mapa.get(k) + " ");
-				Temporizador.pausar(500);
+				Temporizador.pausar(100);
 			}
 			System.out.println("\t>");
 		} catch (Exception ex) {
@@ -148,15 +148,37 @@ public class Impresor {
 			tipoMensaje = formatoInfo;
 			break;
 		case ERROR_LOGICO:
+			StringBuilder sb = new StringBuilder(Thread.currentThread().getName());
+			sb.append("> ");
+			sb.append(msj.get(0));
+			msj.set(0, sb.toString());
 			tipoMensaje = formatoErrorLogico;
 			break;
 		case EXCEPCION:
+			sb = new StringBuilder(Thread.currentThread().getName());
+			sb.append("> ");
+			sb.append(msj.get(0));
+			msj.set(0, sb.toString());
 			tipoMensaje = formatoExcepcion;
 			break;
 		case ERROR:
+			sb = new StringBuilder(Thread.currentThread().getName());
+			sb.append("> ");
+			sb.append(msj.get(0));
+			msj.set(0, sb.toString());
 			tipoMensaje = formatoError;
 			break;
 		case DEPURACION:
+			sb = new StringBuilder(Thread.currentThread().getName());
+			sb.append("> ");
+			StringBuilder strCol = new StringBuilder("");
+			if (msj.get(0).length() > 50) {
+				strCol.append((msj.get(0)).substring(0, 48)).append(" ...");
+				sb.append(strCol);
+			} else {
+				sb.append(msj.get(0));
+			}
+			msj.set(0, (sb.toString()));
 			tipoMensaje = formatoDepuracion;
 			if (!depuracion) {
 				return;
