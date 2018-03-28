@@ -27,7 +27,9 @@ public class AdicionadorAColeccionSincronizado implements Callable<Collection<St
 				coleccion.add(dato);
 			}
 		} catch (Exception ex) {
-			System.out.println("\tEX: " + ex.getMessage());
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
+		} finally {
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
 		}
 		return coleccion;
 	}

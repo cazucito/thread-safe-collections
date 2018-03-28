@@ -9,6 +9,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
+import poc.util.Temporizador;
+import poc.util.TipoMensajes;
 import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
@@ -50,18 +52,21 @@ public class CopyOnWriteArraySetDemo {
 	public static void testConstructores() {
 		/////////////////
 		// CONSTRUCTORES
-		System.out.println("||=== CONSTRUCTORES CopyOnWriteArraySet() ===||");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CONSTRUCTORES");
 		// CopyOnWriteArraySet() => Creates an empty list
-		CopyOnWriteArraySet<String> cowal01 = new CopyOnWriteArraySet<>();
-		cowal01.add("Uno");
-		cowal01.add("Dos");
-		cowal01.add("Tres");
-		// CopyOnWriteArraySet​(Collection<? extends E> c) Creates a set containing all of the elements of the specified collection.
+		CopyOnWriteArraySet<String> cowas01 = new CopyOnWriteArraySet<>();
+		cowas01.add("Uno");
+		cowas01.add("Dos");
+		cowas01.add("Tres");
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cowas01.toString());
+		// CopyOnWriteArraySet​(Collection<? extends E> c) Creates a set containing all
+		// of the elements of the specified collection.
 		List<String> coleccion = new ArrayList<>();
 		coleccion.add("Uno");
 		coleccion.add("Dos");
 		coleccion.add("Tres");
-		CopyOnWriteArraySet<String> cowal03 = new CopyOnWriteArraySet<>(coleccion);
+		CopyOnWriteArraySet<String> cowas02 = new CopyOnWriteArraySet<>(coleccion);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cowas02.toString());
 	}
 
 	/**
@@ -72,17 +77,21 @@ public class CopyOnWriteArraySetDemo {
 		// Piscina de hilos
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		// HashSet
-		System.out.println("||=== HashSet ===||");
-		final Set<String> numeros = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
-		numeros.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
-		Impresor.imprime(numeros);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "HashSet - FAIL-FAST");
+		final Set<String> hs01 = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
+		hs01.add("Tres");
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(hs01, "CUATRO"));
+		Impresor.imprime(hs01);
+		Temporizador.pausar(500);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + hs01.toString());
 		// CopyOnWriteArrayList
-		System.out.println("||=== CopyOnWriteArraySet ===||");
-		final CopyOnWriteArraySet<String> numeros2 = new CopyOnWriteArraySet<>(Arrays.asList("Uno", "Dos", "Tres"));
-		numeros2.add("Tres");
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
-		Impresor.imprime(numeros2);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CopyOnWriteArraySet - FAIL-SAFE");
+		final CopyOnWriteArraySet<String> cowas01 = new CopyOnWriteArraySet<>(Arrays.asList("Uno", "Dos", "Tres"));
+		cowas01.add("Tres");
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(cowas01, "CUATRO"));
+		Impresor.imprime(cowas01);
+		Temporizador.pausar(500);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "Estado final: " + cowas01.toString());
 	}
 
 }

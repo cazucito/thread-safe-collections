@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
+import poc.util.Temporizador;
+import poc.util.TipoMensajes;
 import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
@@ -48,16 +50,18 @@ public class CopyOnWriteArrayListDemo {
 	public static void testConstructores() {
 		/////////////////
 		// CONSTRUCTORES
-		System.out.println("||=== CONSTRUCTORES CopyOnWriteArrayList() ===||");
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CONSTRUCTORES");
 		// CopyOnWriteArrayList() => Creates an empty list
 		CopyOnWriteArrayList<String> cowal01 = new CopyOnWriteArrayList<>();
 		cowal01.add("Uno");
 		cowal01.add("Dos");
 		cowal01.add("Tres");
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cowal01.toString());
 		// CopyOnWriteArrayList​(E[] toCopyIn) => Creates a list holding a copy of the
 		// given array.
 		String[] arregloDeCadenas = { "Uno", "Dos", "Tres" };
 		CopyOnWriteArrayList<String> cowal02 = new CopyOnWriteArrayList<>(arregloDeCadenas);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cowal02.toString());
 		// CopyOnWriteArrayList​(Collection<? extends E> c) => Creates a list containing
 		// the elements of the specified collection, in the order they are returned by
 		// the collection's iterator.
@@ -66,24 +70,27 @@ public class CopyOnWriteArrayListDemo {
 		coleccion.add("Dos");
 		coleccion.add("Tres");
 		CopyOnWriteArrayList<String> cowal03 = new CopyOnWriteArrayList<>(coleccion);
+		Impresor.muestraEnConsola(TipoMensajes.DEPURACION, cowal03.toString());
 	}
 
 	/**
 	 * Prueba CopyOnWriteArrayList
 	 */
 	public static void testCopyOnWriteArrayList() {
-		/////////////////
-		// Piscina de hilos
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		// ArrayList
-		System.out.println("||=== ArrayList ===||");
-		final ArrayList<String> numeros = new ArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
-		Impresor.imprime(numeros);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "ArrayList - FAIL-FAST");
+		final ArrayList<String> al01 = new ArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(al01, "CUATRO"));
+		Impresor.imprime(al01);
+		Temporizador.pausar(500);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + al01.toString());
 		// CopyOnWriteArrayList
-		System.out.println("||=== CopyOnWriteArrayList ===||");
-		final CopyOnWriteArrayList<String> numeros2 = new CopyOnWriteArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
-		Impresor.imprime(numeros2);
+		Impresor.muestraEnConsola(TipoMensajes.SUBTITULO, "CopyOnWriteArrayList - FAIL-SAFE");
+		final CopyOnWriteArrayList<String> cowal01 = new CopyOnWriteArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(cowal01, "CUATRO"));
+		Impresor.imprime(cowal01);
+		Temporizador.pausar(500);
+		Impresor.muestraEnConsola(TipoMensajes.MENSAJE, "Estado final: " + cowal01.toString());
 	}
 }

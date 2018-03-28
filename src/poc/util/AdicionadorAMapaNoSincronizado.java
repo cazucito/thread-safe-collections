@@ -22,11 +22,12 @@ public class AdicionadorAMapaNoSincronizado implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+			Temporizador.pausar(0, 5000);
 			mapa.put(llave, valor);
-			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + llave + "/" + valor + "' al mapa: " + mapa.toString());
 		} catch (Exception ex) {
-			System.out.println("\tEX: " + ex.getMessage());
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
+		} finally {
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + llave + "/" + valor + "' al mapa: " + mapa.toString());
 		}
 	}
 

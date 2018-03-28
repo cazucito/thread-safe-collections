@@ -22,12 +22,12 @@ public class AdicionadorAColeccionNoSincronizado implements Runnable {
 	@Override
 	public void run() {
 		try {
-			// "Pausa" el hilo un lapso de 0-200 milisegundos
 			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
 			coleccion.add(dato);
-			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
 		} catch (Exception ex) {
-			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.getMessage());
+			Impresor.muestraEnConsola(TipoMensajes.EXCEPCION, ex.toString());
+		} finally {
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
 		}
 
 	}
