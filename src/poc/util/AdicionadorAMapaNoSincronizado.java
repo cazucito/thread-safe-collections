@@ -8,12 +8,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author cazucito
  *
  */
-public class ModificadorDeMapa implements Runnable {
+public class AdicionadorAMapaNoSincronizado implements Runnable {
 	private Map<Integer, String> mapa;
 	private Integer llave;
 	private String valor;
 
-	public ModificadorDeMapa(Map<Integer, String> mapa, Integer llave, String valor) {
+	public AdicionadorAMapaNoSincronizado(Map<Integer, String> mapa, Integer llave, String valor) {
 		this.mapa = mapa;
 		this.llave = llave;
 		this.valor = valor;

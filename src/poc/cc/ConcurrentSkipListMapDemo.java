@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
-import poc.util.ModificadorDeMapa;
+import poc.util.AdicionadorAMapaNoSincronizado;
 
 /**
  * DEMO
@@ -116,7 +116,7 @@ public class ConcurrentSkipListMapDemo {
 		mapa.put(2, "DOS");
 		mapa.put(3, "TRES");
 		Impresor.imprimeToString(mapa);
-		hilos.execute(new ModificadorDeMapa(mapa, 4, "CUATRO"));
+		hilos.execute(new AdicionadorAMapaNoSincronizado(mapa, 4, "CUATRO"));
 		Impresor.imprime(mapa);
 		// CopyOnWriteArrayList
 		System.out.println("||=== ConcurrentSkipListMap ===||");
@@ -125,7 +125,7 @@ public class ConcurrentSkipListMapDemo {
 		cslm.put(2, "DOS");
 		cslm.put(3, "TRES");
 		Impresor.imprimeToString(cslm);
-		hilos.execute(new ModificadorDeMapa(cslm, 4, "CUATRO"));
+		hilos.execute(new AdicionadorAMapaNoSincronizado(cslm, 4, "CUATRO"));
 		Impresor.imprime(cslm);
 	}
 

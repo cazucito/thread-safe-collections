@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
-import poc.util.ModificadorDeMapa;
+import poc.util.AdicionadorAMapaNoSincronizado;
 
 /**
  * DEMO
@@ -120,7 +120,7 @@ public class ConcurrentHashMapDemo {
 		mapa.put(2, "DOS");
 		mapa.put(3, "TRES");
 		Impresor.imprimeToString(mapa);
-		hilos.execute(new ModificadorDeMapa(mapa, 4, "CUATRO"));
+		hilos.execute(new AdicionadorAMapaNoSincronizado(mapa, 4, "CUATRO"));
 		Impresor.imprime(mapa);
 		// ConcurrentHashMap
 		System.out.println("||=== ConcurrentHashMap ===||");
@@ -129,7 +129,7 @@ public class ConcurrentHashMapDemo {
 		chm.put(2, "DOS");
 		chm.put(3, "TRES");
 		Impresor.imprimeToString(chm);
-		hilos.execute(new ModificadorDeMapa(chm, 4, "CUATRO"));
+		hilos.execute(new AdicionadorAMapaNoSincronizado(chm, 4, "CUATRO"));
 		Impresor.imprime(chm);
 	}
 
