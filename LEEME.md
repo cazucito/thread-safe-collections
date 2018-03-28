@@ -1,4 +1,4 @@
-# COLECCIONES SEGURAS EN AMBIENTES MULTIHILOS
+# DEMOSTRACIONES DE COLECCIONES SEGURAS EN AMBIENTES MULTIHILOS
 
 Ejemplos para la implementación de colecciones en un ambiente multihilos
 
