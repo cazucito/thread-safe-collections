@@ -25,7 +25,7 @@ public class Impresor {
 	private final static String formatoMensajeOK = "       ok| %-70s |%n";
 	private final static String formatoExcepcion = "       ex| %-70s  |%n";
 	private final static String formatoError = "    error| %-70s  |%n";
-	private final static String formatoDepuracion = "    debug| %-70s  |%n";
+	private final static String formatoDepuracion = "    debug| %-70s |%n";
 	private static boolean depuracion = false;
 	/**
 	 * Habilita mensajes de depuración
@@ -152,7 +152,9 @@ public class Impresor {
 			break;
 		case DEPURACION:
 			tipoMensaje = formatoDepuracion;
-
+			if(!depuracion) {
+				return;
+			}
 			break;
 		}
 		System.out.format(tipoMensaje, msj.toArray());
