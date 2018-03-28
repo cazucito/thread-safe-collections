@@ -1,5 +1,6 @@
 package poc.util;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Impresor {
 	
 	private final static String formatoEncabezado = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
-	private final static String formatoPie = "||:::::::|%70s ||%n";
+	private final static String formatoPie = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
 	private final static String formatoTitulo = "||:::::::|%70s ||%n";
 	private final static String formatoSubtitulo = "         |%70s  |%n";
 	private final static String formatoMensaje = "         | %-70s  |%n";
@@ -124,6 +125,9 @@ public class Impresor {
 			tipoMensaje = formatoEncabezado;
 			break;
 		case PIE:
+			msj.add("=====================================================================");
+			msj.add(0, "---------------------------------------------------------------------");
+			msj.set(1, "" + LocalDate.now().getYear());
 			tipoMensaje = formatoPie;
 			break;
 		case TITULO:
