@@ -45,7 +45,7 @@ public class TSCMain {
 //		ConcurrentHashMapDemo.testConstructores();
 //		ConcurrentHashMapDemo.testConcurrentHashMap();
 
-		
+		Impresor.muestraEnConsola(FormatoMensajes.PIE, "");
 	}
 
 }
