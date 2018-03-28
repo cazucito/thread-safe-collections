@@ -22,7 +22,6 @@ public class AdicionadorAColeccionSincronizado implements Callable<Collection<St
 	@Override
 	public Collection<String> call() {
 		try {
-			// "Pausa" el hilo un lapso de 0-200 milisegundos
 			synchronized (coleccion) {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
 				coleccion.add(dato);
