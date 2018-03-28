@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
-import poc.util.ModificadorDeColeccion;
+import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
  * DEMO public class CopyOnWriteArraySet<E> extends AbstractSet<E> implements
@@ -75,13 +75,13 @@ public class CopyOnWriteArraySetDemo {
 		System.out.println("||=== HashSet ===||");
 		final Set<String> numeros = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		numeros.add("Tres");
-		hilos.execute(new ModificadorDeColeccion(numeros, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
 		Impresor.imprime(numeros);
 		// CopyOnWriteArrayList
 		System.out.println("||=== CopyOnWriteArraySet ===||");
 		final CopyOnWriteArraySet<String> numeros2 = new CopyOnWriteArraySet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		numeros2.add("Tres");
-		hilos.execute(new ModificadorDeColeccion(numeros2, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
 		Impresor.imprime(numeros2);
 	}
 

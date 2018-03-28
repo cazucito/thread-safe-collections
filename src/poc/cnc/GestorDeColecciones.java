@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import poc.util.TipoMensajes;
 import poc.util.Impresor;
-import poc.util.ModificadorDeColeccion;
+import poc.util.AdicionadorAColeccionNoSincronizado;
 import poc.util.ModificadorDeColeccionNoSynchronized;
 import poc.util.Temporizador;
 
@@ -35,7 +35,7 @@ public class GestorDeColecciones {
 		List<String> coleccion = new ArrayList<>();
 		ExecutorService hilos = Executors.newCachedThreadPool();
 		for (int i = 1; i <= 10; i++) {
-			hilos.execute(new ModificadorDeColeccion(coleccion, "x"));
+			hilos.execute(new AdicionadorAColeccionNoSincronizado(coleccion, "x"));
 		}
 		Temporizador.pausar(500);
 		Impresor.muestraEnConsola(TipoMensajes.MENSAJE_OK, "10 = " + coleccion.size());

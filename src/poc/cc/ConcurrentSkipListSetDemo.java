@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
-import poc.util.ModificadorDeColeccion;
+import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
  * DEMO public class ConcurrentSkipListSet<E> extends AbstractSet<E> implements
@@ -110,13 +110,13 @@ public class ConcurrentSkipListSetDemo {
 		System.out.println("||=== SortedSet ===||");
 		final SortedSet<String> numeros = new TreeSet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		numeros.add("Tres");
-		hilos.execute(new ModificadorDeColeccion(numeros, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
 		Impresor.imprime(numeros);
 		// CopyOnWriteArrayList
 		System.out.println("||=== ConcurrentSkipListSet ===||");
 		final ConcurrentSkipListSet<String> numeros2 = new ConcurrentSkipListSet<>(Arrays.asList("Uno", "Dos", "Tres"));
 		numeros2.add("Tres");
-		hilos.execute(new ModificadorDeColeccion(numeros2, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
 		Impresor.imprime(numeros2);
 	}
 

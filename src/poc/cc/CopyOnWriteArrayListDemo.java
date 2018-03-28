@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import poc.util.Impresor;
-import poc.util.ModificadorDeColeccion;
+import poc.util.AdicionadorAColeccionNoSincronizado;
 
 /**
  * DEMO public class CopyOnWriteArrayList<E> extends Object implements List<E>,
@@ -78,12 +78,12 @@ public class CopyOnWriteArrayListDemo {
 		// ArrayList
 		System.out.println("||=== ArrayList ===||");
 		final ArrayList<String> numeros = new ArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new ModificadorDeColeccion(numeros, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros, "CUATRO"));
 		Impresor.imprime(numeros);
 		// CopyOnWriteArrayList
 		System.out.println("||=== CopyOnWriteArrayList ===||");
 		final CopyOnWriteArrayList<String> numeros2 = new CopyOnWriteArrayList<>(Arrays.asList("Uno", "Dos", "Tres"));
-		hilos.execute(new ModificadorDeColeccion(numeros2, "CUATRO"));
+		hilos.execute(new AdicionadorAColeccionNoSincronizado(numeros2, "CUATRO"));
 		Impresor.imprime(numeros2);
 	}
 }

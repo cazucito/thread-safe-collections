@@ -10,11 +10,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author cazucito
  *
  */
-public class ModificadorDeColeccion implements Runnable {
+public class AdicionadorAColeccionNoSincronizado implements Runnable {
 	private Collection<String> coleccion;
 	private String dato;
 
-	public ModificadorDeColeccion(Collection<String> coleccion, String dato) {
+	public AdicionadorAColeccionNoSincronizado(Collection<String> coleccion, String dato) {
 		this.coleccion = coleccion;
 		this.dato = dato;
 	}
