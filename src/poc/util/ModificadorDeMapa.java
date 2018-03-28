@@ -22,13 +22,12 @@ public class ModificadorDeMapa implements Runnable {
 	@Override
 	public void run() {
 		try {
-			// "Pausa" el hilo un lapso de 0-200 milisegundos
 			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+			mapa.put(llave, valor);
+			Impresor.muestraEnConsola(TipoMensajes.DEPURACION, "adición de '" + llave + "/" + valor + "' al mapa: " + mapa.toString());
 		} catch (Exception ex) {
 			System.out.println("\tEX: " + ex.getMessage());
 		}
-		mapa.put(llave, valor);
-		//Impresor.imprimeToString(mapa);
 	}
 
 }
