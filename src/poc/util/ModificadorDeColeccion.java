@@ -5,6 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Adiciona el elemento pasado como parámetro (dato), a la colección (coleccion)
+ * La modificación no es sincronizada
+ * 
  * @author cazucito
  *
  */
@@ -22,11 +24,12 @@ public class ModificadorDeColeccion implements Runnable {
 		try {
 			// "Pausa" el hilo un lapso de 0-200 milisegundos
 			Thread.sleep(ThreadLocalRandom.current().nextInt(0, 200));
+			coleccion.add(dato);
+			Impresor.muestraEnConsola(FormatoMensajes.DEPURACION, "adición de '" + dato + "' a la colección: " + coleccion.toString());
 		} catch (Exception ex) {
-			System.out.println("\tEX: " + ex.getMessage());
+			Impresor.muestraEnConsola(FormatoMensajes.EXCEPCION, ex.getMessage());
 		}
-		coleccion.add(dato);
-		System.out.println("\n\t\tNumeros: " + coleccion);
+
 	}
 
 }
