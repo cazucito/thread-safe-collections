@@ -1,7 +1,10 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.ConsolePrinter;
+import io.github.cazucito.threadsafecollections.support.AsyncTaskSupport;
+import io.github.cazucito.threadsafecollections.support.CollectionTraversal;
+import io.github.cazucito.threadsafecollections.support.CompletionStatus;
 import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.support.TraversalCapture;
 import io.github.cazucito.threadsafecollections.support.UnsynchronizedCollectionAdder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,37 +15,49 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Demostraciones de ConcurrentSkipListSet.
  */
-public final class ConcurrentSkipListSetDemo {
+public final class ConcurrentSkipListSetDemo implements Demo {
 
     private static final int EXECUTOR_TIMEOUT_SECONDS = 2;
 
-    private ConcurrentSkipListSetDemo() {
+    @Override
+    public String id() {
+        return "concurrent-skip-list-set";
     }
 
-    /**
-     * Muestra los constructores principales.
-     */
-    public static void showConstructors() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "CONSTRUCTORES");
+    @Override
+    public String title() {
+        return "ConcurrentSkipListSet (java.util.concurrent)";
+    }
+
+    @Override
+    public DemoResult run() {
+        DemoResult.Builder result = DemoResult.builder(id(), title());
+
+        showConstructors(result);
+        demonstrateConcurrentIteration(result);
+
+        return result.build();
+    }
+
+    private void showConstructors(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "CONSTRUCTORES");
 
         ConcurrentSkipListSet<String> emptySet = new ConcurrentSkipListSet<>();
         emptySet.add("Uno");
         emptySet.add("Dos");
         emptySet.add("Tres");
-        ConsolePrinter.print(MessageType.DEBUG, emptySet.toString());
+        result.add(MessageType.DEBUG, emptySet.toString());
 
         List<String> baseCollection = new ArrayList<>();
         baseCollection.add("Uno");
         baseCollection.add("Dos");
         baseCollection.add("Tres");
         NavigableSet<String> setFromCollection = new ConcurrentSkipListSet<>(baseCollection);
-        ConsolePrinter.print(MessageType.DEBUG, setFromCollection.toString());
+        result.add(MessageType.DEBUG, setFromCollection.toString());
 
         Comparator<String> lengthComparator = (left, right) -> Integer.compare(left.length(), right.length());
         NavigableSet<String> setWithComparator = new ConcurrentSkipListSet<>(lengthComparator);
@@ -51,7 +66,7 @@ public final class ConcurrentSkipListSetDemo {
         setWithComparator.add("55555");
         setWithComparator.add("22");
         setWithComparator.add("22");
-        ConsolePrinter.print(MessageType.DEBUG, setWithComparator.toString());
+        result.add(MessageType.DEBUG, setWithComparator.toString());
 
         SortedSet<String> sortedSet = new TreeSet<>();
         sortedSet.add("Uno");
@@ -59,54 +74,46 @@ public final class ConcurrentSkipListSetDemo {
         sortedSet.add("Tres");
         sortedSet.add("Tres");
         ConcurrentSkipListSet<String> setFromSortedSet = new ConcurrentSkipListSet<>(sortedSet);
-        ConsolePrinter.print(MessageType.DEBUG, setFromSortedSet.toString());
+        result.add(MessageType.DEBUG, setFromSortedSet.toString());
     }
 
-    /**
-     * Compara el recorrido concurrente de TreeSet y ConcurrentSkipListSet.
-     */
-    public static void demonstrateConcurrentIteration() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "SortedSet - FAIL-FAST");
+    private void demonstrateConcurrentIteration(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "SortedSet - FAIL-FAST");
 
         SortedSet<String> treeSet = new TreeSet<>(Arrays.asList("Uno", "Dos", "Tres"));
         treeSet.add("Tres");
-        ConsolePrinter.print(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
+        result.add(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
 
-        ExecutorService treeSetExecutor = startAsyncAddition(
+        ExecutorService treeSetExecutor = AsyncTaskSupport.startSingleTask(
                 new UnsynchronizedCollectionAdder(treeSet, "CUATRO"));
-        ConsolePrinter.printCollection(treeSet);
-        awaitCompletion(treeSetExecutor);
-        ConsolePrinter.print(MessageType.MESSAGE, "Estado final: " + treeSet);
+        appendTraversalMessages(result, CollectionTraversal.capture(treeSet));
+        appendCompletionOutcome(result, treeSetExecutor);
+        result.add(MessageType.MESSAGE, "Estado final: " + treeSet);
 
-        ConsolePrinter.print(MessageType.SUBTITLE, "ConcurrentSkipListSet - FAIL-SAFE");
+        result.add(MessageType.SUBTITLE, "ConcurrentSkipListSet - FAIL-SAFE");
 
         ConcurrentSkipListSet<String> concurrentSet = new ConcurrentSkipListSet<>(Arrays.asList("Uno", "Dos", "Tres"));
         concurrentSet.add("Tres");
-        ConsolePrinter.print(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
+        result.add(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
 
-        ExecutorService concurrentSetExecutor = startAsyncAddition(
+        ExecutorService concurrentSetExecutor = AsyncTaskSupport.startSingleTask(
                 new UnsynchronizedCollectionAdder(concurrentSet, "CUATRO"));
-        ConsolePrinter.printCollection(concurrentSet);
-        awaitCompletion(concurrentSetExecutor);
-        ConsolePrinter.print(MessageType.MESSAGE, "Estado final: " + concurrentSet);
+        appendTraversalMessages(result, CollectionTraversal.capture(concurrentSet));
+        appendCompletionOutcome(result, concurrentSetExecutor);
+        result.add(MessageType.MESSAGE, "Estado final: " + concurrentSet);
     }
 
-    private static ExecutorService startAsyncAddition(Runnable task) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(task);
-        executor.shutdown();
-        return executor;
+    private void appendTraversalMessages(DemoResult.Builder result, TraversalCapture capture) {
+        capture.exceptionMessage().ifPresent(message -> result.add(MessageType.EXCEPTION, message));
+        result.add(MessageType.DEBUG, "finally: " + capture.renderedState());
     }
 
-    private static void awaitCompletion(ExecutorService executor) {
-        try {
-            if (!executor.awaitTermination(EXECUTOR_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                ConsolePrinter.print(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
+    private void appendCompletionOutcome(DemoResult.Builder result, ExecutorService executor) {
+        CompletionStatus completionStatus = AsyncTaskSupport.awaitCompletion(executor, EXECUTOR_TIMEOUT_SECONDS);
+        if (completionStatus == CompletionStatus.TIMED_OUT) {
+            result.add(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
+        } else if (completionStatus == CompletionStatus.INTERRUPTED) {
+            result.add(MessageType.EXCEPTION, "La espera del executor fue interrumpida");
         }
     }
 }

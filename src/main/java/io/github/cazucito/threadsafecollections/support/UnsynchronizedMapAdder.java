@@ -19,17 +19,12 @@ public final class UnsynchronizedMapAdder implements Runnable {
 
     @Override
     public void run() {
-        String mapState = "[]";
-
         try {
             ThreadPause.sleepMillis(1);
             map.put(key, value);
-            mapState = map.toString();
         } catch (Exception exception) {
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
-        } finally {
-            ConsolePrinter.print(MessageType.DEBUG,
-                    "adición de '" + key + "/" + value + "' al mapa: " + mapState);
+            throw new IllegalStateException("No fue posible agregar '" + key + "/" + value + "' al mapa",
+                    exception);
         }
     }
 }
