@@ -1,101 +1,63 @@
-# DEMOSTRACIONES DE COLECCIONES SEGURAS EN AMBIENTES MULTIHILOS
+# Colecciones seguras en ambientes multihilo
 
-Ejemplos para la implementación de colecciones en un ambiente multihilos
+PoC educativa en Java para mostrar diferencias entre colecciones tradicionales y colecciones concurrentes cuando varios hilos modifican o recorren datos al mismo tiempo.
 
-## INICIANDO
+## Requisitos
 
-La clase TSCMain es el punto de entrada a la Prueba de Concepto (PoC)
+- JDK 17 o superior
+- Maven 3.9 o superior
 
-### PREREQUISITOS
+## Estructura del proyecto
 
-JDK 8 +
-Acceso a la línea de comandos / IDE
-
-
-### INSTALANDO
-
-Ejecutar la clase principal
-
-```
-java poc.TSCMain
-```
-
-Actualmente se tienen demostraciones para:
-
-**ArrayList**, **synchronized** y **Collections.synchronizedList(coleccion)**
-
-```
-		// GestorColeccionNoSincronizada
-		GestorDeColecciones.adicionNoSincronizada();
-		GestorDeColecciones.adicionSincronizada();
-		GestorDeColecciones.adicionSincronizadaUtileria();
+```text
+src/
+  main/
+    java/
+      io/github/cazucito/threadsafecollections/
+  test/
+    java/
+      io/github/cazucito/threadsafecollections/
 ```
 
-**CopyOnWriteArrayList**
+## Cómo ejecutar
 
-```
-		// CopyOnWriteArrayList
-		CopyOnWriteArrayListDemo.testConstructores();
-		CopyOnWriteArrayListDemo.testCopyOnWriteArrayList();
-```
+Compilar el proyecto:
 
-**CopyOnWriteArraySet**
-
-```
-		// CopyOnWriteArraySet
-		CopyOnWriteArraySetDemo.testConstructores();
-		CopyOnWriteArraySetDemo.testCopyOnWriteArraySet();
+```bash
+mvn compile
 ```
 
-**ConcurrentSkipListSet**
+Ejecutar la aplicación:
 
-```
-		// ConcurrentSkipListSet
-		ConcurrentSkipListSetDemo.testConstructores();
-		ConcurrentSkipListSetDemo.testConcurrentSkipListSet();
+```bash
+mvn exec:java
 ```
 
-**ConcurrentSkipListMap**
+Ejecutar las pruebas:
 
-```
-		// ConcurrentSkipListMapDemo
-		ConcurrentSkipListMapDemo.testConstructores();
-		ConcurrentSkipListMapDemo.testConcurrentSkipListMap();
+```bash
+mvn test
 ```
 
-```
-		// ConcurrentHashMapDemo
-		ConcurrentHashMapDemo.testConstructores();
-		ConcurrentHashMapDemo.testConcurrentHashMap();
-```
+## Demos incluidas
 
-## DESPLIEGE
+- Comparación entre `ArrayList` no sincronizado, acceso sincronizado manual y `Collections.synchronizedList(...)`
+- `CopyOnWriteArrayList`
+- `CopyOnWriteArraySet`
+- `ConcurrentSkipListSet`
+- `ConcurrentSkipListMap`
+- `ConcurrentHashMap`
 
-JDK 8 +
+## Convenciones del repositorio
 
-## CONSTRUIDO
+- Código en inglés
+- Comentarios y documentación en español neutro
+- Build reproducible con Maven
 
-* [JDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java Development Kit
+## Contribución
 
+La guía de contribución se encuentra en [CONTRIBUCION.md](CONTRIBUCION.md).
 
-## CONTRIBUCIONES
+## Licencia
 
-Por favor lea [CONTRIBUCION.md](CONTRIBUCION.md) por detalles para la colaboración en este proyecto.
-
-## VERSIONES
-
-Versión 0.1a 
-
-## AUTORES
-
-* **Pedro Cazu** - *Trabajo inicial* - [cazucito] (https://github.com/cazucito/)
-
-Ver lista de [contribuyentes] (https://github.com/cazucito/thread-safe-collections/contributors) que participan en este proyecto.
-
-## LICENCIA
-
-Este proyecto esta bajo licencia GNU General Public License v3.0 - ver el archivo [LICENSE](LICENSE) para detalles.
-
-## AGRADECIMIENTOS
-
-* A todos los que de alguna u otra manera están involucrados
+Este proyecto se distribuye bajo la licencia GNU General Public License v3.0. Consulta [LICENSE](LICENSE) para más detalles.

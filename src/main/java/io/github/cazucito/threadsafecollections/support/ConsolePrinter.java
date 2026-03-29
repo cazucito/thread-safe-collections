@@ -1,0 +1,173 @@
+package io.github.cazucito.threadsafecollections.support;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Utilería para imprimir mensajes y estados de las demos.
+ */
+public final class ConsolePrinter {
+
+    private static final String HEADER_FORMAT = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
+    private static final String FOOTER_FORMAT = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
+    private static final String TITLE_FORMAT = "||:::::::| :::::::::::::::%54s ||%n";
+    private static final String SUBTITLE_FORMAT = "         | ---------------%54s  |%n";
+    private static final String MESSAGE_FORMAT = "         | %-70s |%n";
+    private static final String INFO_FORMAT = "     info| %-70s  |%n";
+    private static final String LOGIC_ERROR_FORMAT = "      bug| %-70s |%n";
+    private static final String SUCCESS_FORMAT = "       ok| %-70s |%n";
+    private static final String EXCEPTION_FORMAT = "       ex| %-70s |%n";
+    private static final String ERROR_FORMAT = "    error| %-70s |%n";
+    private static final String DEBUG_FORMAT = "    debug| %-70s |%n";
+
+    private static boolean debugEnabled = false;
+
+    private ConsolePrinter() {
+    }
+
+    /**
+     * Activa la salida de depuración.
+     */
+    public static void enableDebug() {
+        debugEnabled = true;
+    }
+
+    /**
+     * Desactiva la salida de depuración.
+     */
+    public static void disableDebug() {
+        debugEnabled = false;
+    }
+
+    /**
+     * Indica si la depuración está activa.
+     *
+     * @return {@code true} si la depuración está habilitada
+     */
+    public static boolean isDebugEnabled() {
+        return debugEnabled;
+    }
+
+    /**
+     * Imprime una colección de cadenas mientras otra tarea puede modificarla.
+     *
+     * @param collection colección a imprimir
+     */
+    public static void printCollection(Collection<String> collection) {
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            builder.append("<");
+            for (String value : collection) {
+                builder.append(" ").append(value);
+                ThreadPause.sleepMillis(100);
+            }
+            builder.append(" >");
+        } catch (Exception exception) {
+            print(MessageType.EXCEPTION, exception.toString());
+        } finally {
+            print(MessageType.DEBUG, "finally: " + builder);
+        }
+    }
+
+    /**
+     * Imprime un mapa de enteros a cadenas mientras otra tarea puede modificarlo.
+     *
+     * @param map mapa a imprimir
+     */
+    public static void printMap(Map<Integer, String> map) {
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            builder.append("<");
+            for (Integer key : map.keySet()) {
+                builder.append(" ").append(key).append("/").append(map.get(key));
+                ThreadPause.sleepMillis(100);
+            }
+            builder.append(" >");
+        } catch (Exception exception) {
+            print(MessageType.EXCEPTION, exception.toString());
+        } finally {
+            print(MessageType.DEBUG, "finally: " + builder);
+        }
+    }
+
+    /**
+     * Imprime un mensaje con formato.
+     *
+     * @param messageType tipo de mensaje
+     * @param messages    textos a imprimir
+     */
+    public static void print(MessageType messageType, String... messages) {
+        String format = "";
+        List<String> values = new ArrayList<>(Arrays.asList(messages));
+
+        switch (messageType) {
+            case HEADER:
+                values.add(0, "=====================================================================");
+                values.add("---------------------------------------------------------------------");
+                format = HEADER_FORMAT;
+                break;
+            case FOOTER:
+                values.add("=====================================================================");
+                values.add(0, "---------------------------------------------------------------------");
+                values.set(1, "Java " + System.getProperty("java.version") + " | " + LocalDate.now().getYear());
+                format = FOOTER_FORMAT;
+                break;
+            case TITLE:
+                format = TITLE_FORMAT;
+                break;
+            case SUBTITLE:
+                format = SUBTITLE_FORMAT;
+                break;
+            case MESSAGE:
+                format = MESSAGE_FORMAT;
+                break;
+            case SUCCESS:
+                format = SUCCESS_FORMAT;
+                break;
+            case INFO:
+                format = INFO_FORMAT;
+                break;
+            case LOGIC_ERROR:
+                values.set(0, withThreadName(values.get(0)));
+                format = LOGIC_ERROR_FORMAT;
+                break;
+            case EXCEPTION:
+                values.set(0, withThreadName(values.get(0)));
+                format = EXCEPTION_FORMAT;
+                break;
+            case ERROR:
+                values.set(0, withThreadName(values.get(0)));
+                format = ERROR_FORMAT;
+                break;
+            case DEBUG:
+                if (!debugEnabled) {
+                    return;
+                }
+                values.set(0, abbreviate(withThreadName(values.get(0))));
+                format = DEBUG_FORMAT;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported message type: " + messageType);
+        }
+
+        System.out.format(format, values.toArray());
+    }
+
+    private static String withThreadName(String message) {
+        return Thread.currentThread().getName() + "> " + message;
+    }
+
+    private static String abbreviate(String message) {
+        if (message.length() <= 50) {
+            return message;
+        }
+
+        return message.substring(0, 48) + " ...";
+    }
+}
