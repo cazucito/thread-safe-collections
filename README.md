@@ -2,6 +2,8 @@
 
 PoC educativa en Java para mostrar diferencias entre colecciones tradicionales y colecciones concurrentes cuando varios hilos modifican o recorren datos al mismo tiempo.
 
+Versión actual para estudio: `1.0.0`
+
 ## Requisitos
 
 - JDK 17 o superior
@@ -51,6 +53,12 @@ Ejecutar una demo con depuración:
 ./mvnw exec:java -Dexec.args="--debug --demo concurrent-hash-map"
 ```
 
+Ejecutar en modo rápido para clase, CI o revisión:
+
+```bash
+./mvnw exec:java -Dexec.args="--fast --demo basic-collection"
+```
+
 Ejecutar las pruebas:
 
 ```bash
@@ -66,6 +74,20 @@ Ejecutar las pruebas:
 - `ConcurrentSkipListMap`
 - `ConcurrentHashMap`
 
+## Ruta sugerida para estudiantes
+
+1. Ejecutar `basic-collection` para observar el problema base.
+2. Continuar con `copy-on-write-array-list` y `copy-on-write-array-set`.
+3. Seguir con `concurrent-skip-list-set` y `concurrent-skip-list-map`.
+4. Cerrar con `concurrent-hash-map` como alternativa práctica común.
+
+## Criterios de esta versión
+
+- Todas las demos registradas tienen pruebas de humo automatizadas.
+- La CLI ofrece modo rápido con `--fast` para acelerar sesiones de clase y CI.
+- La salida en consola incluye objetivo, observación esperada y conclusión por demo.
+- La integración continua valida el proyecto en JDK 17 y JDK 21.
+
 ## Convenciones del repositorio
 
 - Código en inglés
@@ -75,7 +97,9 @@ Ejecutar las pruebas:
 ## Documentación
 
 - Índice técnico: [docs/README.md](docs/README.md)
+- Guía de estudio para estudiantes: [docs/student-study-guide.md](docs/student-study-guide.md)
 - Plan de evolución del repositorio: [docs/roadmap/repository-evolution-plan.md](docs/roadmap/repository-evolution-plan.md)
+- Historial de cambios: [CHANGELOG.md](CHANGELOG.md)
 
 ## Contribución
 

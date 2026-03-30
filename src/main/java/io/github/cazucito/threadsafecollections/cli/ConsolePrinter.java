@@ -102,11 +102,14 @@ public final class ConsolePrinter {
      *
      * @param result resultado estructurado de la demo
      */
-    public void printDemoResult(DemoResult result) {
+    public void printDemoResult(Demo demo, DemoResult result) {
         print(MessageType.TITLE, result.title());
+        print(MessageType.INFO, "Objetivo: " + demo.learningObjective());
+        print(MessageType.INFO, "Observa: " + demo.expectedObservation());
         for (DemoMessage message : result.messages()) {
             print(message.type(), message.text());
         }
+        print(MessageType.INFO, "Conclusión: " + demo.keyTakeaway());
     }
 
     /**
@@ -118,6 +121,7 @@ public final class ConsolePrinter {
         print(MessageType.TITLE, "DEMOS DISPONIBLES");
         for (Demo demo : demos) {
             print(MessageType.MESSAGE, demo.id() + " - " + demo.title());
+            print(MessageType.INFO, "Objetivo: " + demo.learningObjective());
         }
     }
 

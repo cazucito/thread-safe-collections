@@ -20,6 +20,27 @@ public interface Demo {
     String title();
 
     /**
+     * Describe qué debería aprender la persona al ejecutar la demo.
+     *
+     * @return objetivo pedagógico principal
+     */
+    String learningObjective();
+
+    /**
+     * Describe qué salida o comportamiento conviene observar durante la ejecución.
+     *
+     * @return observación recomendada
+     */
+    String expectedObservation();
+
+    /**
+     * Resume la conclusión principal que deja la demo.
+     *
+     * @return conclusión breve
+     */
+    String keyTakeaway();
+
+    /**
      * Ejecuta la demo y devuelve su salida estructurada.
      *
      * @return resultado estructurado de la demo

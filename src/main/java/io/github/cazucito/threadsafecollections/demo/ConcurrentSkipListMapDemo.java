@@ -33,6 +33,21 @@ public final class ConcurrentSkipListMapDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Comparar mapas ordenados fail-fast contra mapas ordenados concurrentes.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "TreeMap puede fallar al iterar; ConcurrentSkipListMap mantiene el recorrido.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "ConcurrentSkipListMap permite orden y concurrencia sin bloqueo manual.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 

@@ -34,6 +34,21 @@ public final class ConcurrentSkipListSetDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Comparar un conjunto ordenado tradicional con uno concurrente.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "TreeSet puede fallar; ConcurrentSkipListSet permite recorrido concurrente.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "ConcurrentSkipListSet combina orden natural con acceso concurrente seguro.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 

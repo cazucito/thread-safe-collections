@@ -53,7 +53,7 @@ class ThreadSafeCollectionsApplicationTest {
         ByteArrayOutputStream error = new ByteArrayOutputStream();
 
         int exitCode = ThreadSafeCollectionsApplication.run(
-                new String[0],
+                new String[]{"--fast"},
                 new PrintStream(output),
                 new PrintStream(error)
         );
@@ -61,6 +61,23 @@ class ThreadSafeCollectionsApplicationTest {
         assertEquals(0, exitCode);
         assertTrue(output.toString().contains("CopyOnWriteArrayList"));
         assertTrue(output.toString().contains("ConcurrentHashMap"));
+        assertTrue(output.toString().contains("Modo rápido activo"));
+        assertTrue(error.toString().isEmpty());
+    }
+
+    @Test
+    void helpMentionsFastMode() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream error = new ByteArrayOutputStream();
+
+        int exitCode = ThreadSafeCollectionsApplication.run(
+                new String[]{"--help"},
+                new PrintStream(output),
+                new PrintStream(error)
+        );
+
+        assertEquals(0, exitCode);
+        assertTrue(output.toString().contains("--fast"));
         assertTrue(error.toString().isEmpty());
     }
 

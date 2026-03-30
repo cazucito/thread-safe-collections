@@ -30,6 +30,21 @@ public final class CopyOnWriteArrayListDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Comparar iteración fail-fast contra iteración por snapshot en listas.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "ArrayList puede fallar; CopyOnWriteArrayList recorre una copia estable.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "CopyOnWriteArrayList favorece lecturas seguras y paga el costo al escribir.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 

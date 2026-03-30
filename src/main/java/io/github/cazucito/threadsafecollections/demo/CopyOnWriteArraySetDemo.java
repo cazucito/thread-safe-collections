@@ -32,6 +32,21 @@ public final class CopyOnWriteArraySetDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Observar iteración segura y unicidad en un set copy-on-write.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "HashSet puede fallar al recorrer; CopyOnWriteArraySet mantiene recorrido estable.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "CopyOnWriteArraySet es útil cuando se lee mucho y se escribe poco.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 
