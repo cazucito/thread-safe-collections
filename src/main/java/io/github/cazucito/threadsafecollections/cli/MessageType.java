@@ -1,4 +1,4 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.cli;
 
 /**
  * Tipos de mensaje disponibles para la salida de consola.

@@ -1,10 +1,10 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.AsyncTaskSupport;
-import io.github.cazucito.threadsafecollections.support.CompletionStatus;
-import io.github.cazucito.threadsafecollections.support.MessageType;
-import io.github.cazucito.threadsafecollections.support.SynchronizedCollectionAdder;
-import io.github.cazucito.threadsafecollections.support.UnsynchronizedCollectionAdder;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
+import io.github.cazucito.threadsafecollections.concurrency.AsyncTaskSupport;
+import io.github.cazucito.threadsafecollections.concurrency.CompletionStatus;
+import io.github.cazucito.threadsafecollections.concurrency.SynchronizedCollectionAdder;
+import io.github.cazucito.threadsafecollections.concurrency.UnsynchronizedCollectionAdder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

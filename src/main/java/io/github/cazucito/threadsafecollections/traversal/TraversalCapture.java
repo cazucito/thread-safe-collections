@@ -1,4 +1,4 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.traversal;
 
 import java.util.Optional;
 

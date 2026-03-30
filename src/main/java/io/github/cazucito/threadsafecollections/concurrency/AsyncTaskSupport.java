@@ -1,4 +1,4 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.concurrency;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

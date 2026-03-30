@@ -1,4 +1,4 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.cli;
 
 import io.github.cazucito.threadsafecollections.demo.Demo;
 import io.github.cazucito.threadsafecollections.demo.DemoMessage;
