@@ -1,6 +1,6 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

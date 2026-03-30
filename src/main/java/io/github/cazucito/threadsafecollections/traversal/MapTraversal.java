@@ -1,5 +1,6 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.traversal;
 
+import io.github.cazucito.threadsafecollections.concurrency.ThreadPause;
 import java.util.Map;
 
 /**

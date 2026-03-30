@@ -1,6 +1,6 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
 
 /**
  * Mensaje estructurado generado por una demo.

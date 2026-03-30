@@ -1,11 +1,11 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.AsyncTaskSupport;
-import io.github.cazucito.threadsafecollections.support.CompletionStatus;
-import io.github.cazucito.threadsafecollections.support.MapTraversal;
-import io.github.cazucito.threadsafecollections.support.MessageType;
-import io.github.cazucito.threadsafecollections.support.TraversalCapture;
-import io.github.cazucito.threadsafecollections.support.UnsynchronizedMapAdder;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
+import io.github.cazucito.threadsafecollections.concurrency.AsyncTaskSupport;
+import io.github.cazucito.threadsafecollections.concurrency.CompletionStatus;
+import io.github.cazucito.threadsafecollections.concurrency.UnsynchronizedMapAdder;
+import io.github.cazucito.threadsafecollections.traversal.MapTraversal;
+import io.github.cazucito.threadsafecollections.traversal.TraversalCapture;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;

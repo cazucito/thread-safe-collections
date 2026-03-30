@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.cazucito.threadsafecollections.demo.DemoResult;
-import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
 import org.junit.jupiter.api.Test;
 
 /**

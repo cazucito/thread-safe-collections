@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.cazucito.threadsafecollections.support.ConsolePrinter;
-import io.github.cazucito.threadsafecollections.support.MessageType;
-import io.github.cazucito.threadsafecollections.support.ThreadPause;
+import io.github.cazucito.threadsafecollections.cli.ConsolePrinter;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
+import io.github.cazucito.threadsafecollections.concurrency.ThreadPause;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.jupiter.api.Test;

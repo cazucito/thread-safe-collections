@@ -2,8 +2,8 @@ package io.github.cazucito.threadsafecollections;
 
 import io.github.cazucito.threadsafecollections.demo.Demo;
 import io.github.cazucito.threadsafecollections.demo.DemoRegistry;
-import io.github.cazucito.threadsafecollections.support.ConsolePrinter;
-import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.cli.ConsolePrinter;
+import io.github.cazucito.threadsafecollections.cli.MessageType;
 import java.io.PrintStream;
 import java.util.List;
 

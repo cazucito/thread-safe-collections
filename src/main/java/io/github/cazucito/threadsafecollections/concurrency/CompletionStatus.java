@@ -1,4 +1,4 @@
-package io.github.cazucito.threadsafecollections.support;
+package io.github.cazucito.threadsafecollections.concurrency;
 
 /**
  * Estado final de una ejecución asíncrona.
