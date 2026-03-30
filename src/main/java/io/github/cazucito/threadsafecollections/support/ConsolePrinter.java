@@ -1,14 +1,16 @@
 package io.github.cazucito.threadsafecollections.support;
 
+import io.github.cazucito.threadsafecollections.demo.Demo;
+import io.github.cazucito.threadsafecollections.demo.DemoMessage;
+import io.github.cazucito.threadsafecollections.demo.DemoResult;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Utilería para imprimir mensajes y estados de las demos.
+ * Renderiza en consola la salida estructurada de la aplicación.
  */
 public final class ConsolePrinter {
 
@@ -24,85 +26,21 @@ public final class ConsolePrinter {
     private static final String ERROR_FORMAT = "    error| %-70s |%n";
     private static final String DEBUG_FORMAT = "    debug| %-70s |%n";
 
-    private static boolean debugEnabled = false;
+    private final PrintStream output;
+    private final boolean debugEnabled;
 
-    private ConsolePrinter() {
+    public ConsolePrinter(PrintStream output, boolean debugEnabled) {
+        this.output = output;
+        this.debugEnabled = debugEnabled;
     }
 
     /**
-     * Activa la salida de depuración.
-     */
-    public static void enableDebug() {
-        debugEnabled = true;
-    }
-
-    /**
-     * Desactiva la salida de depuración.
-     */
-    public static void disableDebug() {
-        debugEnabled = false;
-    }
-
-    /**
-     * Indica si la depuración está activa.
-     *
-     * @return {@code true} si la depuración está habilitada
-     */
-    public static boolean isDebugEnabled() {
-        return debugEnabled;
-    }
-
-    /**
-     * Imprime una colección de cadenas mientras otra tarea puede modificarla.
-     *
-     * @param collection colección a imprimir
-     */
-    public static void printCollection(Collection<String> collection) {
-        StringBuilder builder = new StringBuilder();
-
-        try {
-            builder.append("<");
-            for (String value : collection) {
-                builder.append(" ").append(value);
-                ThreadPause.sleepMillis(100);
-            }
-            builder.append(" >");
-        } catch (Exception exception) {
-            print(MessageType.EXCEPTION, exception.toString());
-        } finally {
-            print(MessageType.DEBUG, "finally: " + builder);
-        }
-    }
-
-    /**
-     * Imprime un mapa de enteros a cadenas mientras otra tarea puede modificarlo.
-     *
-     * @param map mapa a imprimir
-     */
-    public static void printMap(Map<Integer, String> map) {
-        StringBuilder builder = new StringBuilder();
-
-        try {
-            builder.append("<");
-            for (Integer key : map.keySet()) {
-                builder.append(" ").append(key).append("/").append(map.get(key));
-                ThreadPause.sleepMillis(100);
-            }
-            builder.append(" >");
-        } catch (Exception exception) {
-            print(MessageType.EXCEPTION, exception.toString());
-        } finally {
-            print(MessageType.DEBUG, "finally: " + builder);
-        }
-    }
-
-    /**
-     * Imprime un mensaje con formato.
+     * Imprime un mensaje arbitrario.
      *
      * @param messageType tipo de mensaje
      * @param messages    textos a imprimir
      */
-    public static void print(MessageType messageType, String... messages) {
+    public void print(MessageType messageType, String... messages) {
         String format = "";
         List<String> values = new ArrayList<>(Arrays.asList(messages));
 
@@ -156,14 +94,38 @@ public final class ConsolePrinter {
                 throw new IllegalArgumentException("Unsupported message type: " + messageType);
         }
 
-        System.out.format(format, values.toArray());
+        output.format(format, values.toArray());
     }
 
-    private static String withThreadName(String message) {
+    /**
+     * Imprime el resultado completo de una demo.
+     *
+     * @param result resultado estructurado de la demo
+     */
+    public void printDemoResult(DemoResult result) {
+        print(MessageType.TITLE, result.title());
+        for (DemoMessage message : result.messages()) {
+            print(message.type(), message.text());
+        }
+    }
+
+    /**
+     * Imprime la lista de demos disponibles.
+     *
+     * @param demos demos registradas
+     */
+    public void printDemoList(List<Demo> demos) {
+        print(MessageType.TITLE, "DEMOS DISPONIBLES");
+        for (Demo demo : demos) {
+            print(MessageType.MESSAGE, demo.id() + " - " + demo.title());
+        }
+    }
+
+    private String withThreadName(String message) {
         return Thread.currentThread().getName() + "> " + message;
     }
 
-    private static String abbreviate(String message) {
+    private String abbreviate(String message) {
         if (message.length() <= 50) {
             return message;
         }

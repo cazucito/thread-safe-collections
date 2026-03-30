@@ -1,6 +1,7 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.ConsolePrinter;
+import io.github.cazucito.threadsafecollections.support.AsyncTaskSupport;
+import io.github.cazucito.threadsafecollections.support.CompletionStatus;
 import io.github.cazucito.threadsafecollections.support.MessageType;
 import io.github.cazucito.threadsafecollections.support.SynchronizedCollectionAdder;
 import io.github.cazucito.threadsafecollections.support.UnsynchronizedCollectionAdder;
@@ -9,24 +10,38 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Demostraciones básicas con colecciones tradicionales.
  */
-public final class BasicCollectionDemo {
+public final class BasicCollectionDemo implements Demo {
 
     private static final int THREAD_COUNT = 7;
     private static final int EXECUTOR_TIMEOUT_SECONDS = 2;
 
-    private BasicCollectionDemo() {
+    @Override
+    public String id() {
+        return "basic-collection";
     }
 
-    /**
-     * Demuestra una adición concurrente sin sincronización.
-     */
-    public static void demonstrateUnsynchronizedAddition() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "ArrayList - no sincronizado");
+    @Override
+    public String title() {
+        return "COLECCIONES TRADICIONALES (java.util)";
+    }
+
+    @Override
+    public DemoResult run() {
+        DemoResult.Builder result = DemoResult.builder(id(), title());
+
+        demonstrateUnsynchronizedAddition(result);
+        demonstrateSynchronizedAddition(result);
+        demonstrateUtilitySynchronizedAddition(result);
+
+        return result.build();
+    }
+
+    private void demonstrateUnsynchronizedAddition(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "ArrayList - no sincronizado");
 
         List<String> collection = new ArrayList<>();
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -35,15 +50,12 @@ public final class BasicCollectionDemo {
             executor.execute(new UnsynchronizedCollectionAdder(collection, String.valueOf(index)));
         }
 
-        awaitCompletion(executor);
-        printSizeResult(collection.size());
+        appendCompletionOutcome(result, executor);
+        appendSizeResult(result, collection.size());
     }
 
-    /**
-     * Demuestra una adición concurrente con sincronización explícita.
-     */
-    public static void demonstrateSynchronizedAddition() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "ArrayList - synchronized");
+    private void demonstrateSynchronizedAddition(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "ArrayList - synchronized");
 
         List<String> collection = new ArrayList<>();
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -52,15 +64,12 @@ public final class BasicCollectionDemo {
             executor.execute(new SynchronizedCollectionAdder(collection, String.valueOf(index)));
         }
 
-        awaitCompletion(executor);
-        printSizeResult(collection.size());
+        appendCompletionOutcome(result, executor);
+        appendSizeResult(result, collection.size());
     }
 
-    /**
-     * Demuestra una adición concurrente con la utilidad de sincronización de la JDK.
-     */
-    public static void demonstrateUtilitySynchronizedAddition() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "ArrayList - Collections.synchronizedList()");
+    private void demonstrateUtilitySynchronizedAddition(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "ArrayList - Collections.synchronizedList()");
 
         List<String> collection = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -69,30 +78,27 @@ public final class BasicCollectionDemo {
             executor.execute(new UnsynchronizedCollectionAdder(collection, " " + index));
         }
 
-        awaitCompletion(executor);
-        printSizeResult(collection.size());
+        appendCompletionOutcome(result, executor);
+        appendSizeResult(result, collection.size());
     }
 
-    private static void printSizeResult(int elementCount) {
+    private void appendCompletionOutcome(DemoResult.Builder result, ExecutorService executor) {
+        executor.shutdown();
+        CompletionStatus completionStatus = AsyncTaskSupport.awaitCompletion(executor, EXECUTOR_TIMEOUT_SECONDS);
+
+        if (completionStatus == CompletionStatus.TIMED_OUT) {
+            result.add(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
+        } else if (completionStatus == CompletionStatus.INTERRUPTED) {
+            result.add(MessageType.EXCEPTION, "La espera del executor fue interrumpida");
+        }
+    }
+
+    private void appendSizeResult(DemoResult.Builder result, int elementCount) {
         if (THREAD_COUNT != elementCount) {
-            ConsolePrinter.print(MessageType.LOGIC_ERROR, THREAD_COUNT + " \u2260 " + elementCount);
+            result.add(MessageType.LOGIC_ERROR, THREAD_COUNT + " \u2260 " + elementCount);
             return;
         }
 
-        ConsolePrinter.print(MessageType.SUCCESS, THREAD_COUNT + " = " + elementCount);
-    }
-
-    private static void awaitCompletion(ExecutorService executor) {
-        executor.shutdown();
-
-        try {
-            if (!executor.awaitTermination(EXECUTOR_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                ConsolePrinter.print(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
-        }
+        result.add(MessageType.SUCCESS, THREAD_COUNT + " = " + elementCount);
     }
 }

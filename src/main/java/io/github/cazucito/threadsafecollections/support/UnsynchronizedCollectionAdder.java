@@ -17,17 +17,11 @@ public final class UnsynchronizedCollectionAdder implements Runnable {
 
     @Override
     public void run() {
-        String collectionState = "[]";
-
         try {
             ThreadPause.sleepMillis(100);
             collection.add(value);
-            collectionState = collection.toString();
         } catch (Exception exception) {
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
-        } finally {
-            ConsolePrinter.print(MessageType.DEBUG,
-                    "adición de '" + value + "' a la colección: " + collectionState);
+            throw new IllegalStateException("No fue posible agregar '" + value + "' a la colección", exception);
         }
     }
 }

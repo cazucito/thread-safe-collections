@@ -1,7 +1,10 @@
 package io.github.cazucito.threadsafecollections.demo;
 
-import io.github.cazucito.threadsafecollections.support.ConsolePrinter;
+import io.github.cazucito.threadsafecollections.support.AsyncTaskSupport;
+import io.github.cazucito.threadsafecollections.support.CollectionTraversal;
+import io.github.cazucito.threadsafecollections.support.CompletionStatus;
 import io.github.cazucito.threadsafecollections.support.MessageType;
+import io.github.cazucito.threadsafecollections.support.TraversalCapture;
 import io.github.cazucito.threadsafecollections.support.UnsynchronizedCollectionAdder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,84 +13,88 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Demostraciones de CopyOnWriteArraySet.
  */
-public final class CopyOnWriteArraySetDemo {
+public final class CopyOnWriteArraySetDemo implements Demo {
 
     private static final int EXECUTOR_TIMEOUT_SECONDS = 2;
 
-    private CopyOnWriteArraySetDemo() {
+    @Override
+    public String id() {
+        return "copy-on-write-array-set";
     }
 
-    /**
-     * Muestra los constructores principales.
-     */
-    public static void showConstructors() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "CONSTRUCTORES");
+    @Override
+    public String title() {
+        return "CopyOnWriteArraySet (java.util.concurrent)";
+    }
+
+    @Override
+    public DemoResult run() {
+        DemoResult.Builder result = DemoResult.builder(id(), title());
+
+        showConstructors(result);
+        demonstrateConcurrentIteration(result);
+
+        return result.build();
+    }
+
+    private void showConstructors(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "CONSTRUCTORES");
 
         CopyOnWriteArraySet<String> emptySet = new CopyOnWriteArraySet<>();
         emptySet.add("Uno");
         emptySet.add("Dos");
         emptySet.add("Tres");
-        ConsolePrinter.print(MessageType.DEBUG, emptySet.toString());
+        result.add(MessageType.DEBUG, emptySet.toString());
 
         List<String> baseCollection = new ArrayList<>();
         baseCollection.add("Uno");
         baseCollection.add("Dos");
         baseCollection.add("Tres");
         CopyOnWriteArraySet<String> setFromCollection = new CopyOnWriteArraySet<>(baseCollection);
-        ConsolePrinter.print(MessageType.DEBUG, setFromCollection.toString());
+        result.add(MessageType.DEBUG, setFromCollection.toString());
     }
 
-    /**
-     * Compara el recorrido concurrente de HashSet y CopyOnWriteArraySet.
-     */
-    public static void demonstrateConcurrentIteration() {
-        ConsolePrinter.print(MessageType.SUBTITLE, "HashSet - FAIL-FAST");
+    private void demonstrateConcurrentIteration(DemoResult.Builder result) {
+        result.add(MessageType.SUBTITLE, "HashSet - FAIL-FAST");
 
         Set<String> hashSet = new HashSet<>(Arrays.asList("Uno", "Dos", "Tres"));
         hashSet.add("Tres");
-        ConsolePrinter.print(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
+        result.add(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
 
-        ExecutorService hashSetExecutor = startAsyncAddition(
+        ExecutorService hashSetExecutor = AsyncTaskSupport.startSingleTask(
                 new UnsynchronizedCollectionAdder(hashSet, "CUATRO"));
-        ConsolePrinter.printCollection(hashSet);
-        awaitCompletion(hashSetExecutor);
-        ConsolePrinter.print(MessageType.MESSAGE, "Estado final: " + hashSet);
+        appendTraversalMessages(result, CollectionTraversal.capture(hashSet));
+        appendCompletionOutcome(result, hashSetExecutor);
+        result.add(MessageType.MESSAGE, "Estado final: " + hashSet);
 
-        ConsolePrinter.print(MessageType.SUBTITLE, "CopyOnWriteArraySet - FAIL-SAFE");
+        result.add(MessageType.SUBTITLE, "CopyOnWriteArraySet - FAIL-SAFE");
 
         CopyOnWriteArraySet<String> copyOnWriteSet = new CopyOnWriteArraySet<>(Arrays.asList("Uno", "Dos", "Tres"));
         copyOnWriteSet.add("Tres");
-        ConsolePrinter.print(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
+        result.add(MessageType.SUCCESS, ".add(\"Tres\") no altera la colección");
 
-        ExecutorService copyOnWriteExecutor = startAsyncAddition(
+        ExecutorService copyOnWriteExecutor = AsyncTaskSupport.startSingleTask(
                 new UnsynchronizedCollectionAdder(copyOnWriteSet, "CUATRO"));
-        ConsolePrinter.printCollection(copyOnWriteSet);
-        awaitCompletion(copyOnWriteExecutor);
-        ConsolePrinter.print(MessageType.MESSAGE, "Estado final: " + copyOnWriteSet);
+        appendTraversalMessages(result, CollectionTraversal.capture(copyOnWriteSet));
+        appendCompletionOutcome(result, copyOnWriteExecutor);
+        result.add(MessageType.MESSAGE, "Estado final: " + copyOnWriteSet);
     }
 
-    private static ExecutorService startAsyncAddition(Runnable task) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(task);
-        executor.shutdown();
-        return executor;
+    private void appendTraversalMessages(DemoResult.Builder result, TraversalCapture capture) {
+        capture.exceptionMessage().ifPresent(message -> result.add(MessageType.EXCEPTION, message));
+        result.add(MessageType.DEBUG, "finally: " + capture.renderedState());
     }
 
-    private static void awaitCompletion(ExecutorService executor) {
-        try {
-            if (!executor.awaitTermination(EXECUTOR_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                ConsolePrinter.print(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
+    private void appendCompletionOutcome(DemoResult.Builder result, ExecutorService executor) {
+        CompletionStatus completionStatus = AsyncTaskSupport.awaitCompletion(executor, EXECUTOR_TIMEOUT_SECONDS);
+        if (completionStatus == CompletionStatus.TIMED_OUT) {
+            result.add(MessageType.ERROR, "No fue posible finalizar el executor a tiempo");
+        } else if (completionStatus == CompletionStatus.INTERRUPTED) {
+            result.add(MessageType.EXCEPTION, "La espera del executor fue interrumpida");
         }
     }
 }

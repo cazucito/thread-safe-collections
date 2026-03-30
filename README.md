@@ -24,19 +24,37 @@ src/
 Compilar el proyecto:
 
 ```bash
-mvn compile
+./mvnw compile
 ```
 
 Ejecutar la aplicación:
 
 ```bash
-mvn exec:java
+./mvnw exec:java
+```
+
+Listar demos disponibles:
+
+```bash
+./mvnw exec:java -Dexec.args="--list"
+```
+
+Ejecutar una demo puntual:
+
+```bash
+./mvnw exec:java -Dexec.args="--demo basic-collection"
+```
+
+Ejecutar una demo con depuración:
+
+```bash
+./mvnw exec:java -Dexec.args="--debug --demo concurrent-hash-map"
 ```
 
 Ejecutar las pruebas:
 
 ```bash
-mvn test
+./mvnw test
 ```
 
 ## Demos incluidas
@@ -53,6 +71,11 @@ mvn test
 - Código en inglés
 - Comentarios y documentación en español neutro
 - Build reproducible con Maven
+
+## Documentación
+
+- Índice técnico: [docs/README.md](docs/README.md)
+- Plan de evolución del repositorio: [docs/roadmap/repository-evolution-plan.md](docs/roadmap/repository-evolution-plan.md)
 
 ## Contribución
 

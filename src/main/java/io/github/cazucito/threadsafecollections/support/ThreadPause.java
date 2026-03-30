@@ -20,7 +20,6 @@ public final class ThreadPause {
             Thread.sleep(milliseconds);
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
         }
     }
 
@@ -35,7 +34,6 @@ public final class ThreadPause {
             Thread.sleep(ThreadLocalRandom.current().nextInt(minMilliseconds, maxMilliseconds));
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
-            ConsolePrinter.print(MessageType.EXCEPTION, exception.toString());
         }
     }
 }
