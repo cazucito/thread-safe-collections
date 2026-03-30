@@ -30,6 +30,21 @@ public final class ConcurrentHashMapDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Comparar un mapa tradicional con uno diseñado para concurrencia.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "HashMap puede fallar al iterar; ConcurrentHashMap sigue operativo.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "ConcurrentHashMap suele ser la alternativa práctica para mapas compartidos.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 

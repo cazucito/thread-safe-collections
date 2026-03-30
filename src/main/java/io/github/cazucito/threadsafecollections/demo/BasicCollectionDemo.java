@@ -30,6 +30,21 @@ public final class BasicCollectionDemo implements Demo {
     }
 
     @Override
+    public String learningObjective() {
+        return "Comparar inserciones concurrentes con y sin sincronización explícita.";
+    }
+
+    @Override
+    public String expectedObservation() {
+        return "La lista no sincronizada puede perder elementos; las protegidas no.";
+    }
+
+    @Override
+    public String keyTakeaway() {
+        return "Una colección tradicional necesita protección externa para uso concurrente.";
+    }
+
+    @Override
     public DemoResult run() {
         DemoResult.Builder result = DemoResult.builder(id(), title());
 
@@ -95,7 +110,7 @@ public final class BasicCollectionDemo implements Demo {
 
     private void appendSizeResult(DemoResult.Builder result, int elementCount) {
         if (THREAD_COUNT != elementCount) {
-            result.add(MessageType.LOGIC_ERROR, THREAD_COUNT + " \u2260 " + elementCount);
+            result.add(MessageType.LOGIC_ERROR, THREAD_COUNT + " != " + elementCount);
             return;
         }
 

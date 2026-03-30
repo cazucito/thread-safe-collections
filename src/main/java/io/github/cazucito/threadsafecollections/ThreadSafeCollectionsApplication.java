@@ -4,6 +4,7 @@ import io.github.cazucito.threadsafecollections.demo.Demo;
 import io.github.cazucito.threadsafecollections.demo.DemoRegistry;
 import io.github.cazucito.threadsafecollections.cli.ConsolePrinter;
 import io.github.cazucito.threadsafecollections.cli.MessageType;
+import io.github.cazucito.threadsafecollections.concurrency.ThreadPause;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * Punto de entrada de la aplicación.
  */
 public final class ThreadSafeCollectionsApplication {
+
+    private static final double FAST_DELAY_MULTIPLIER = 0.25d;
 
     private ThreadSafeCollectionsApplication() {
     }
@@ -45,58 +48,74 @@ public final class ThreadSafeCollectionsApplication {
 
         DemoRegistry registry = DemoRegistry.defaultRegistry();
         ConsolePrinter printer = new ConsolePrinter(output, options.debug());
+        double originalDelayMultiplier = ThreadPause.delayMultiplier();
 
-        if (options.help()) {
-            printUsage(output);
-            return 0;
-        }
-
-        if (options.list()) {
-            printer.printDemoList(registry.demos());
-            return 0;
-        }
-
-        List<Demo> demosToRun;
-        if (options.demoId() != null) {
-            Demo selectedDemo = registry.findById(options.demoId())
-                    .orElse(null);
-            if (selectedDemo == null) {
-                error.println("No existe una demo con id '" + options.demoId() + "'.");
-                printUsage(error);
-                return 1;
+        try {
+            if (options.fast()) {
+                ThreadPause.setDelayMultiplier(FAST_DELAY_MULTIPLIER);
             }
-            demosToRun = List.of(selectedDemo);
-        } else {
-            demosToRun = registry.demos();
-        }
 
-        printer.print(MessageType.HEADER, "COLECCIONES SEGURAS EN AMBIENTES MULTIHILO");
-        for (Demo demo : demosToRun) {
-            printer.printDemoResult(demo.run());
+            if (options.help()) {
+                printUsage(output);
+                return 0;
+            }
+
+            if (options.list()) {
+                printer.printDemoList(registry.demos());
+                return 0;
+            }
+
+            List<Demo> demosToRun;
+            if (options.demoId() != null) {
+                Demo selectedDemo = registry.findById(options.demoId())
+                        .orElse(null);
+                if (selectedDemo == null) {
+                    error.println("No existe una demo con id '" + options.demoId() + "'.");
+                    printUsage(error);
+                    return 1;
+                }
+                demosToRun = List.of(selectedDemo);
+            } else {
+                demosToRun = registry.demos();
+            }
+
+            printer.print(MessageType.HEADER, "COLECCIONES SEGURAS EN AMBIENTES MULTIHILO");
+            if (options.fast()) {
+                printer.print(MessageType.INFO, "Modo rápido activo para estudio guiado y CI.");
+            }
+            for (Demo demo : demosToRun) {
+                printer.printDemoResult(demo, demo.run());
+            }
+            printer.print(MessageType.FOOTER, "");
+            return 0;
+        } finally {
+            ThreadPause.setDelayMultiplier(originalDelayMultiplier);
         }
-        printer.print(MessageType.FOOTER, "");
-        return 0;
     }
 
     private static void printUsage(PrintStream output) {
         output.println("Uso:");
         output.println("  ./mvnw exec:java -Dexec.args=\"--list\"");
         output.println("  ./mvnw exec:java -Dexec.args=\"--demo basic-collection\"");
+        output.println("  ./mvnw exec:java -Dexec.args=\"--fast --demo basic-collection\"");
         output.println("  ./mvnw exec:java -Dexec.args=\"--debug --demo concurrent-hash-map\"");
         output.println();
         output.println("Opciones:");
         output.println("  --list         Lista las demos disponibles.");
         output.println("  --demo <id>    Ejecuta solo la demo indicada.");
+        output.println("  --fast         Reduce las pausas para clase, CI o revisión rápida.");
         output.println("  --debug        Muestra mensajes de depuración.");
         output.println("  --help         Muestra esta ayuda.");
     }
 
-    private record CliOptions(boolean debug, boolean list, boolean help, String demoId, String errorMessage) {
+    private record CliOptions(boolean debug, boolean list, boolean help, boolean fast, String demoId,
+                              String errorMessage) {
 
         private static CliOptions parse(String[] args) {
             boolean debug = false;
             boolean list = false;
             boolean help = false;
+            boolean fast = false;
             String demoId = null;
 
             for (int index = 0; index < args.length; index++) {
@@ -111,29 +130,32 @@ public final class ThreadSafeCollectionsApplication {
                     case "--help":
                         help = true;
                         break;
+                    case "--fast":
+                        fast = true;
+                        break;
                     case "--demo":
                         if (demoId != null) {
-                            return new CliOptions(debug, list, help, demoId,
+                            return new CliOptions(debug, list, help, fast, demoId,
                                     "Solo se puede especificar una demo por ejecución.");
                         }
                         if (index + 1 >= args.length) {
-                            return new CliOptions(debug, list, help, null,
+                            return new CliOptions(debug, list, help, fast, null,
                                     "La opción --demo requiere un identificador.");
                         }
                         demoId = args[++index];
                         break;
                     default:
-                        return new CliOptions(debug, list, help, demoId,
+                        return new CliOptions(debug, list, help, fast, demoId,
                                 "Argumento no soportado: " + argument);
                 }
             }
 
             if (list && demoId != null) {
-                return new CliOptions(debug, true, help, demoId,
+                return new CliOptions(debug, true, help, fast, demoId,
                         "No se puede usar --list junto con --demo.");
             }
 
-            return new CliOptions(debug, list, help, demoId, null);
+            return new CliOptions(debug, list, help, fast, demoId, null);
         }
     }
 }

@@ -4,8 +4,12 @@ Este directorio reúne documentos de apoyo para la evolución del repositorio.
 
 ## Índice
 
+- Guía de estudio para estudiantes:
+  [docs/student-study-guide.md](student-study-guide.md)
 - Roadmap y visión del repositorio:
   [docs/roadmap/repository-evolution-plan.md](roadmap/repository-evolution-plan.md)
+- Historial de cambios de la versión:
+  [CHANGELOG.md](../CHANGELOG.md)
 
 ## Convenciones
 
