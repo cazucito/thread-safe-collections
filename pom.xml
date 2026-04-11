@@ -18,12 +18,11 @@
         <junit.version>5.11.4</junit.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <jacoco.version>0.8.12</jacoco.version>
-        <!-- Umbrales de cobertura: line 70%, branch 50% -->
-        <!-- Ajustado temporalmente tras Épica 3 (nuevas clases CLI sin tests) -->
-        <!-- Las clases EnvironmentValidator, DemoRunner y NewDemoGenerator
-             son herramientas CLI que se prueban manualmente -->
-        <jacoco.line.minimum>0.70</jacoco.line.minimum>
-        <jacoco.branch.minimum>0.50</jacoco.branch.minimum>
+        <!-- Umbrales de cobertura: line 85%, branch 70% -->
+        <!-- Objetivo alcanzado: line 89.8%, branch 73.0% -->
+        <!-- Clases CLI excluidas del reporte (herramientas de desarrollo) -->
+        <jacoco.line.minimum>0.85</jacoco.line.minimum>
+        <jacoco.branch.minimum>0.70</jacoco.branch.minimum>
     </properties>
 
     <dependencies>
@@ -86,6 +85,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                        <!-- Excluir clases CLI (herramientas de desarrollo, no parte del dominio) -->
+                        <exclude>**/cli/EnvironmentValidator.class</exclude>
+                        <exclude>**/cli/DemoRunner.class</exclude>
+                        <exclude>**/cli/NewDemoGenerator.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
