@@ -95,4 +95,70 @@ class ThreadSafeCollectionsApplicationTest {
         assertEquals(1, exitCode);
         assertTrue(error.toString().contains("No existe una demo"));
     }
+
+    @Test
+    void partialMatchWithUniqueResultRunsDemo() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream error = new ByteArrayOutputStream();
+
+        // "copy-on-write-array-list" es la única que contiene "copy-on-write-list"
+        int exitCode = ThreadSafeCollectionsApplication.run(
+                new String[]{"--demo", "copy-on-write-list"},
+                new PrintStream(output),
+                new PrintStream(error)
+        );
+
+        assertEquals(0, exitCode);
+        assertTrue(output.toString().contains("CopyOnWriteArrayList"));
+        assertTrue(error.toString().isEmpty());
+    }
+
+    @Test
+    void partialMatchWithMultipleResultsShowsSuggestions() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream error = new ByteArrayOutputStream();
+
+        // "map" coincide con concurrent-hash-map y concurrent-skip-list-map
+        int exitCode = ThreadSafeCollectionsApplication.run(
+                new String[]{"--demo", "map"},
+                new PrintStream(output),
+                new PrintStream(error)
+        );
+
+        assertEquals(1, exitCode);
+        assertTrue(error.toString().contains("Múltiples demos coinciden"));
+        assertTrue(error.toString().contains("concurrent-hash-map"));
+        assertTrue(error.toString().contains("concurrent-skip-list-map"));
+    }
+
+    @Test
+    void partialMatchWithNoResultsShowsError() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream error = new ByteArrayOutputStream();
+
+        int exitCode = ThreadSafeCollectionsApplication.run(
+                new String[]{"--demo", "xyz123"},
+                new PrintStream(output),
+                new PrintStream(error)
+        );
+
+        assertEquals(1, exitCode);
+        assertTrue(error.toString().contains("No existe una demo"));
+        assertTrue(error.toString().contains("Use --list"));
+    }
+
+    @Test
+    void helpMentionsPartialMatching() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream error = new ByteArrayOutputStream();
+
+        int exitCode = ThreadSafeCollectionsApplication.run(
+                new String[]{"--help"},
+                new PrintStream(output),
+                new PrintStream(error)
+        );
+
+        assertEquals(0, exitCode);
+        assertTrue(output.toString().contains("coincidencia parcial"));
+    }
 }

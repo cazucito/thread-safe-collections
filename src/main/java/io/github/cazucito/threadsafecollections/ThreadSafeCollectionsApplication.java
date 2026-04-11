@@ -73,10 +73,37 @@ public final class ThreadSafeCollectionsApplication {
             if (options.demoId() != null) {
                 Demo selectedDemo = registry.findById(options.demoId())
                         .orElse(null);
+                
+                // Si no se encuentra exacta, intentar fuzzy matching
                 if (selectedDemo == null) {
-                    error.println("No existe una demo con id '" + options.demoId() + "'.");
-                    printUsage(error);
-                    return 1;
+                    selectedDemo = registry.findUniqueMatch(options.demoId()).orElse(null);
+                    
+                    if (selectedDemo != null) {
+                        // Match único encontrado - informar al usuario
+                        formatter.formatInfo("Demo '" + options.demoId() + "' no encontrada exactamente. " +
+                                "Usando coincidencia única: '" + selectedDemo.id() + "'", output);
+                    } else {
+                        // No hay match único - mostrar sugerencias
+                        List<Demo> partialMatches = registry.findByPartialId(options.demoId());
+                        if (partialMatches.isEmpty()) {
+                            error.println("No existe una demo con id '" + options.demoId() + "'.");
+                            error.println();
+                            error.println("Use --list para ver las demos disponibles.");
+                        } else if (partialMatches.size() == 1) {
+                            // Esto no debería pasar, pero por si acaso
+                            selectedDemo = partialMatches.get(0);
+                        } else {
+                            // Múltiples coincidencias
+                            error.println("No existe una demo con id '" + options.demoId() + "'.");
+                            error.println();
+                            error.println(registry.getSuggestionsText(options.demoId()));
+                        }
+                        
+                        if (selectedDemo == null) {
+                            printUsage(error);
+                            return 1;
+                        }
+                    }
                 }
                 demosToRun = List.of(selectedDemo);
             } else {
@@ -107,11 +134,16 @@ public final class ThreadSafeCollectionsApplication {
         output.println();
         output.println("Opciones:");
         output.println("  --list         Lista las demos disponibles.");
-        output.println("  --demo <id>    Ejecuta solo la demo indicada.");
+        output.println("  --demo <id>    Ejecuta solo la demo indicada (acepta coincidencia parcial).");
         output.println("  --fast         Reduce las pausas para clase, CI o revisión rápida.");
         output.println("  --debug        Muestra mensajes de depuración.");
         output.println("  --format <fmt> Formato de salida: console (default) o json.");
         output.println("  --help         Muestra esta ayuda.");
+        output.println();
+        output.println("Ejemplos de coincidencia parcial:");
+        output.println("  --demo copy    → Coincide con copy-on-write-array-list");
+        output.println("  --demo basic   → Coincide con basic-collection");
+        output.println("  --demo map     → Muestra sugerencias (concurrent-hash-map, concurrent-skip-list-map)");
     }
 
     private static DemoResultFormatter createFormatter(OutputFormat format, boolean debug) {
