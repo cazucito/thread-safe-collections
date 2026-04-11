@@ -1,8 +1,8 @@
-# Plan de Mejora 2025
+# Plan de Mejora 2026
 ## thread-safe-collections
 
 **Versión:** 1.0  
-**Fecha:** 2025-04-11  
+**Fecha:** 2026-04-11  
 **Estándar:** ISO 21500 / Agile con OKRs  
 **Estado:** Aprobado para implementación
 
@@ -15,7 +15,7 @@ Convertir `thread-safe-collections` en la referencia educativa de código abiert
 
 ### 1.2 Objetivos Estratégicos (OKRs)
 
-| Objetivo | Key Results (Q2-Q4 2025) | Métrica |
+| Objetivo | Key Results (Q2-Q4 2026) | Métrica |
 |----------|-------------------------|---------|
 | **Calidad** | Cobertura de tests > 80%, 0 tests flaky | % cobertura, # builds fallidos por flaky tests |
 | **Experiencia Developer** | Onboarding < 5 min, setup automático | Tiempo hasta primer `./mvnw test` exitoso |
@@ -342,9 +342,9 @@ Q4 2025 (Oct-Dic)
 
 | Fecha | Milestone | Entregables |
 |-------|-----------|-------------|
-| 2025-06-30 | **Stability Release** | 80% cobertura, 0 flaky tests, CI verde |
-| 2025-09-30 | **Developer Ready** | Setup automatizado, template de demos, guía contribución |
-| 2025-12-31 | **Content Complete** | 9+ demos, guía de decisión, benchmarks iniciales |
+| 2026-06-30 | **Stability Release** | 80% cobertura, 0 flaky tests, CI verde |
+| 2026-09-30 | **Developer Ready** | Setup automatizado, template de demos, guía contribución |
+| 2026-12-31 | **Content Complete** | 9+ demos, guía de decisión, benchmarks iniciales |
 
 ---
 
@@ -433,7 +433,7 @@ Los siguientes temas requieren ADR (Architecture Decision Record) antes de imple
 
 | Rol | Nombre | Fecha | Estado |
 |-----|--------|-------|--------|
-| Product Owner | @cazucito | 2025-04-11 | ✅ Aprobado |
+| Product Owner | @cazucito | 2026-04-11 | ✅ Aprobado |
 | Tech Lead | TBD | - | ⏳ Pendiente |
 | Maintainer | TBD | - | ⏳ Pendiente |
 
