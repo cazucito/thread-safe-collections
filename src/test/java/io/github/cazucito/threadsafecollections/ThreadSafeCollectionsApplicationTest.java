@@ -101,9 +101,9 @@ class ThreadSafeCollectionsApplicationTest {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ByteArrayOutputStream error = new ByteArrayOutputStream();
 
-        // "copy-on-write-array-list" es la única que contiene "copy-on-write-list"
+        // "copy-on-write-array-list" es la única demo con "array-list" en el id
         int exitCode = ThreadSafeCollectionsApplication.run(
-                new String[]{"--demo", "copy-on-write-list"},
+                new String[]{"--demo", "array-list"},
                 new PrintStream(output),
                 new PrintStream(error)
         );
