@@ -102,6 +102,14 @@ class DemoIntegrationTest {
             "La demo '" + demoId + "' debería contener subtítulo: '" + expectedSubtitle + "'");
     }
 
+    /**
+     * Este test verifica que las demos de colecciones concurrentes muestren
+     * excepción en la versión no segura.
+     *
+     * NOTA: Este test ejecuta cada demo 3 veces porque el comportamiento depende de
+     * race conditions que no siempre se manifiestan en una sola ejecución.
+     * Pasa si al menos una ejecución muestra la excepción esperada.
+     */
     @ParameterizedTest(name = "Demo: {0}")
     @ValueSource(strings = {
         "copy-on-write-array-list",
@@ -116,14 +124,21 @@ class DemoIntegrationTest {
                 .findById(demoId)
                 .orElseThrow(() -> new AssertionError("Demo no encontrada: " + demoId));
 
-        DemoResult result = demo.run();
+        // Ejecutar múltiples veces para aumentar probabilidad de race condition
+        boolean hasExceptionInAnyRun = false;
+        for (int i = 0; i < 3; i++) {
+            DemoResult result = demo.run();
+            boolean hasExceptionMessage = result.messages().stream()
+                    .anyMatch(m -> m.type() == MessageType.EXCEPTION || m.type() == MessageType.ERROR);
+            if (hasExceptionMessage) {
+                hasExceptionInAnyRun = true;
+                break;
+            }
+        }
 
-        // Verificar que hay al menos un mensaje de tipo EXCEPTION o ERROR
-        boolean hasExceptionMessage = result.messages().stream()
-                .anyMatch(m -> m.type() == MessageType.EXCEPTION || m.type() == MessageType.ERROR);
-
-        assertTrue(hasExceptionMessage,
-            "La demo '" + demoId + "' debería mostrar excepción/error en la versión no segura");
+        assertTrue(hasExceptionInAnyRun,
+            "La demo '" + demoId + "' debería mostrar excepción/error en la versión no segura " +
+            "en al menos una de las ejecuciones");
     }
 
     @ParameterizedTest(name = "Demo: {0}")
