@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
       - "codex/**"
   pull_request:
 
@@ -35,8 +35,8 @@ jobs:
   # BM-5.1: Benchmarks JMH (opcional, solo en master)
   benchmarks:
     runs-on: ubuntu-latest
-    # Solo ejecutar en pushes a master, no en PRs
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # Solo ejecutar en pushes a main, no en PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     strategy:
       matrix:
