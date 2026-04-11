@@ -27,7 +27,10 @@ public final class DemoRegistry {
                 new CopyOnWriteArraySetDemo(),
                 new ConcurrentSkipListSetDemo(),
                 new ConcurrentSkipListMapDemo(),
-                new ConcurrentHashMapDemo()
+                new ConcurrentHashMapDemo(),
+                new ConcurrentLinkedQueueDemo(),
+                new ArrayBlockingQueueDemo(),
+                new LongAdderDemo()
         ));
     }
 
