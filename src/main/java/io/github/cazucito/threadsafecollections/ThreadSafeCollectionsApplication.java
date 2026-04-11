@@ -5,6 +5,9 @@ import io.github.cazucito.threadsafecollections.demo.DemoRegistry;
 import io.github.cazucito.threadsafecollections.cli.ConsolePrinter;
 import io.github.cazucito.threadsafecollections.cli.MessageType;
 import io.github.cazucito.threadsafecollections.concurrency.ThreadPause;
+import io.github.cazucito.threadsafecollections.format.ConsoleDemoResultFormatter;
+import io.github.cazucito.threadsafecollections.format.DemoResultFormatter;
+import io.github.cazucito.threadsafecollections.format.JsonDemoResultFormatter;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -47,7 +50,8 @@ public final class ThreadSafeCollectionsApplication {
         }
 
         DemoRegistry registry = DemoRegistry.defaultRegistry();
-        ConsolePrinter printer = new ConsolePrinter(output, options.debug());
+        DemoResultFormatter formatter = createFormatter(options.format(), options.debug());
+        ConsolePrinter printer = new ConsolePrinter(output, options.debug(), formatter);
         double originalDelayMultiplier = ThreadPause.delayMultiplier();
 
         try {
@@ -61,7 +65,7 @@ public final class ThreadSafeCollectionsApplication {
             }
 
             if (options.list()) {
-                printer.printDemoList(registry.demos());
+                formatter.formatDemoList(registry.demos(), output);
                 return 0;
             }
 
@@ -79,14 +83,14 @@ public final class ThreadSafeCollectionsApplication {
                 demosToRun = registry.demos();
             }
 
-            printer.print(MessageType.HEADER, "COLECCIONES SEGURAS EN AMBIENTES MULTIHILO");
-            if (options.fast()) {
-                printer.print(MessageType.INFO, "Modo rápido activo para estudio guiado y CI.");
+            formatter.formatHeader("COLECCIONES SEGURAS EN AMBIENTES MULTIHILO", output);
+            if (options.fast() && options.format() != OutputFormat.JSON) {
+                formatter.formatInfo("Modo rápido activo para estudio guiado y CI.", output);
             }
             for (Demo demo : demosToRun) {
-                printer.printDemoResult(demo, demo.run());
+                formatter.formatDemoResult(demo, demo.run(), output);
             }
-            printer.print(MessageType.FOOTER, "");
+            formatter.formatFooter(output);
             return 0;
         } finally {
             ThreadPause.setDelayMultiplier(originalDelayMultiplier);
@@ -99,17 +103,26 @@ public final class ThreadSafeCollectionsApplication {
         output.println("  ./mvnw exec:java -Dexec.args=\"--demo basic-collection\"");
         output.println("  ./mvnw exec:java -Dexec.args=\"--fast --demo basic-collection\"");
         output.println("  ./mvnw exec:java -Dexec.args=\"--debug --demo concurrent-hash-map\"");
+        output.println("  ./mvnw exec:java -Dexec.args=\"--format json --demo basic-collection\"");
         output.println();
         output.println("Opciones:");
         output.println("  --list         Lista las demos disponibles.");
         output.println("  --demo <id>    Ejecuta solo la demo indicada.");
         output.println("  --fast         Reduce las pausas para clase, CI o revisión rápida.");
         output.println("  --debug        Muestra mensajes de depuración.");
+        output.println("  --format <fmt> Formato de salida: console (default) o json.");
         output.println("  --help         Muestra esta ayuda.");
     }
 
+    private static DemoResultFormatter createFormatter(OutputFormat format, boolean debug) {
+        return switch (format) {
+            case JSON -> new JsonDemoResultFormatter(debug);
+            case CONSOLE -> new ConsoleDemoResultFormatter(debug);
+        };
+    }
+
     private record CliOptions(boolean debug, boolean list, boolean help, boolean fast, String demoId,
-                              String errorMessage) {
+                              OutputFormat format, String errorMessage) {
 
         private static CliOptions parse(String[] args) {
             boolean debug = false;
@@ -117,6 +130,7 @@ public final class ThreadSafeCollectionsApplication {
             boolean help = false;
             boolean fast = false;
             String demoId = null;
+            OutputFormat format = OutputFormat.CONSOLE;
 
             for (int index = 0; index < args.length; index++) {
                 String argument = args[index];
@@ -133,29 +147,47 @@ public final class ThreadSafeCollectionsApplication {
                     case "--fast":
                         fast = true;
                         break;
+                    case "--format":
+                        if (index + 1 >= args.length) {
+                            return new CliOptions(debug, list, help, fast, null, format,
+                                    "La opción --format requiere un formato (console o json).");
+                        }
+                        String formatValue = args[++index].toLowerCase();
+                        try {
+                            format = OutputFormat.valueOf(formatValue.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            return new CliOptions(debug, list, help, fast, demoId, format,
+                                    "Formato no soportado: " + formatValue + ". Use 'console' o 'json'.");
+                        }
+                        break;
                     case "--demo":
                         if (demoId != null) {
-                            return new CliOptions(debug, list, help, fast, demoId,
+                            return new CliOptions(debug, list, help, fast, demoId, format,
                                     "Solo se puede especificar una demo por ejecución.");
                         }
                         if (index + 1 >= args.length) {
-                            return new CliOptions(debug, list, help, fast, null,
+                            return new CliOptions(debug, list, help, fast, null, format,
                                     "La opción --demo requiere un identificador.");
                         }
                         demoId = args[++index];
                         break;
                     default:
-                        return new CliOptions(debug, list, help, fast, demoId,
+                        return new CliOptions(debug, list, help, fast, demoId, format,
                                 "Argumento no soportado: " + argument);
                 }
             }
 
             if (list && demoId != null) {
-                return new CliOptions(debug, true, help, fast, demoId,
+                return new CliOptions(debug, list, help, fast, demoId, format,
                         "No se puede usar --list junto con --demo.");
             }
 
-            return new CliOptions(debug, list, help, fast, demoId, null);
+            return new CliOptions(debug, list, help, fast, demoId, format, null);
         }
+    }
+
+    private enum OutputFormat {
+        CONSOLE,
+        JSON
     }
 }

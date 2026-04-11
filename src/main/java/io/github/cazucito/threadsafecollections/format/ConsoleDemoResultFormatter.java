@@ -1,9 +1,9 @@
-package io.github.cazucito.threadsafecollections.cli;
+package io.github.cazucito.threadsafecollections.format;
 
+import io.github.cazucito.threadsafecollections.cli.MessageType;
 import io.github.cazucito.threadsafecollections.demo.Demo;
 import io.github.cazucito.threadsafecollections.demo.DemoMessage;
 import io.github.cazucito.threadsafecollections.demo.DemoResult;
-import io.github.cazucito.threadsafecollections.format.DemoResultFormatter;
 import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Renderiza en consola la salida estructurada de la aplicación.
+ * Formateador de resultados para salida en consola.
  * 
- * Esta clase mantiene compatibilidad backward con código existente
- * y delega el formateo principal a {@link DemoResultFormatter}.
+ * Implementa el formato visual original con bordes ASCII
+ * y colores semánticos por tipo de mensaje.
  */
-public final class ConsolePrinter {
+public final class ConsoleDemoResultFormatter implements DemoResultFormatter {
 
     private static final String HEADER_FORMAT = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
     private static final String FOOTER_FORMAT = "||:::::::|%70s ||%n||:::::::|%70s ||%n||:::::::|%70s ||%n";
@@ -30,40 +30,53 @@ public final class ConsolePrinter {
     private static final String ERROR_FORMAT = "    error| %-70s |%n";
     private static final String DEBUG_FORMAT = "    debug| %-70s |%n";
 
-    private final PrintStream output;
     private final boolean debugEnabled;
-    private final DemoResultFormatter formatter;
 
     /**
-     * Crea una impresora de consola con el formateador especificado.
+     * Crea un formateador de consola.
      *
-     * @param output       flujo de salida
      * @param debugEnabled si true, muestra mensajes de debug
-     * @param formatter    formateador a usar
      */
-    public ConsolePrinter(PrintStream output, boolean debugEnabled, DemoResultFormatter formatter) {
-        this.output = output;
+    public ConsoleDemoResultFormatter(boolean debugEnabled) {
         this.debugEnabled = debugEnabled;
-        this.formatter = formatter;
     }
 
-    /**
-     * Crea una impresora de consola con formateador por defecto.
-     *
-     * @param output       flujo de salida
-     * @param debugEnabled si true, muestra mensajes de debug
-     */
-    public ConsolePrinter(PrintStream output, boolean debugEnabled) {
-        this(output, debugEnabled, new io.github.cazucito.threadsafecollections.format.ConsoleDemoResultFormatter(debugEnabled));
+    @Override
+    public void formatDemoResult(Demo demo, DemoResult result, PrintStream output) {
+        formatMessage(MessageType.TITLE, output, result.title());
+        formatMessage(MessageType.INFO, output, "Objetivo: " + demo.learningObjective());
+        formatMessage(MessageType.INFO, output, "Observa: " + demo.expectedObservation());
+        for (DemoMessage message : result.messages()) {
+            formatMessage(message.type(), output, message.text());
+        }
+        formatMessage(MessageType.INFO, output, "Conclusión: " + demo.keyTakeaway());
     }
 
-    /**
-     * Imprime un mensaje arbitrario.
-     *
-     * @param messageType tipo de mensaje
-     * @param messages    textos a imprimir
-     */
-    public void print(MessageType messageType, String... messages) {
+    @Override
+    public void formatDemoList(List<Demo> demos, PrintStream output) {
+        formatMessage(MessageType.TITLE, output, "DEMOS DISPONIBLES");
+        for (Demo demo : demos) {
+            formatMessage(MessageType.MESSAGE, output, demo.id() + " - " + demo.title());
+            formatMessage(MessageType.INFO, output, "Objetivo: " + demo.learningObjective());
+        }
+    }
+
+    @Override
+    public void formatHeader(String title, PrintStream output) {
+        formatMessage(MessageType.HEADER, output, title);
+    }
+
+    @Override
+    public void formatFooter(PrintStream output) {
+        formatMessage(MessageType.FOOTER, output, "");
+    }
+
+    @Override
+    public void formatInfo(String message, PrintStream output) {
+        formatMessage(MessageType.INFO, output, message);
+    }
+
+    private void formatMessage(MessageType messageType, PrintStream output, String... messages) {
         String format = "";
         List<String> values = new ArrayList<>(Arrays.asList(messages));
 
@@ -118,25 +131,6 @@ public final class ConsolePrinter {
         }
 
         output.format(format, values.toArray());
-    }
-
-    /**
-     * Imprime el resultado completo de una demo.
-     *
-     * @param demo   la demo ejecutada
-     * @param result resultado estructurado de la demo
-     */
-    public void printDemoResult(Demo demo, DemoResult result) {
-        formatter.formatDemoResult(demo, result, output);
-    }
-
-    /**
-     * Imprime la lista de demos disponibles.
-     *
-     * @param demos demos registradas
-     */
-    public void printDemoList(List<Demo> demos) {
-        formatter.formatDemoList(demos, output);
     }
 
     private String withThreadName(String message) {
