@@ -1,0 +1,13 @@
+# SDKMAN configuration for thread-safe-collections
+# https://sdkman.io/usage#env-command
+#
+# Uso:
+#   sdk env        - Activar versiones del proyecto
+#   sdk env clear  - Volver a versiones globales
+#
+
+# Java 17 (Eclipse Temurin)
+java=17.0.14-tem
+
+# Maven 3.9.x
+maven=3.9.9
