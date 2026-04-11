@@ -31,3 +31,46 @@ jobs:
 
       - name: Run tests
         run: ./mvnw -B test
+
+  # BM-5.1: Benchmarks JMH (opcional, solo en master)
+  benchmarks:
+    runs-on: ubuntu-latest
+    # Solo ejecutar en pushes a master, no en PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
+    strategy:
+      matrix:
+        java-version: ["17", "21"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+          cache: maven
+
+      - name: Make wrapper executable
+        run: chmod +x mvnw
+
+      - name: Compile tests (incluye benchmarks)
+        run: ./mvnw -B test-compile
+
+      - name: Run JMH Benchmarks
+        run: |
+          ./mvnw -B exec:java \
+            -Dexec.mainClass="io.github.cazucito.threadsafecollections.benchmark.BenchmarkRunner" \
+            -Dexec.classpathScope=test \
+            -Dexec.cleanupDaemonThreads=false
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmh-results-java-${{ matrix.java-version }}
+          path: |
+            jmh-benchmark-results.txt
+            jmh-benchmark-results.json
+          retention-days: 30
