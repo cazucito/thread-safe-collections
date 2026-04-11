@@ -17,7 +17,7 @@ copyright: Copyright &copy; 2026 cazucito - Licencia GPL v3.0
 theme:
   name: material
   language: es
-  custom_dir: docs/overrides
+
   
   # Palette (dark/light mode)
   palette:
@@ -95,14 +95,6 @@ markdown_extensions:
   - toc:
       permalink: true
       toc_depth: 3
-
-# Extra CSS
-extra_css:
-  - assets/stylesheets/extra.css
-
-# Extra JavaScript
-extra_javascript:
-  - assets/javascripts/extra.js
 
 # Extra options
 extra:
