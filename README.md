@@ -6,7 +6,7 @@
 [![Coverage](https://img.shields.io/badge/Coverage-89.8%25-success)](https://github.com/cazucito/thread-safe-collections)
 [![License](https://img.shields.io/badge/License-GPL%20v3.0-blue)](LICENSE)
 
-> **PoCS** sobre colecciones seguras en ambientes multihilo con Java. Aprende mediante demostraciones interactivas, benchmarks y guías prácticas.
+> **PoCs** sobre colecciones seguras en ambientes multihilo con Java. Aprende mediante demostraciones interactivas, benchmarks y guías prácticas.
 
 [![Docs](https://img.shields.io/badge/Documentation-GitHub%20Pages-222?logo=github)](https://cazucito.github.io/thread-safe-collections/)
 
