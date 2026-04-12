@@ -1,110 +1,152 @@
-# Colecciones seguras en ambientes multihilo
+# 🔒 Thread-Safe Collections
 
-PoC educativa en Java para mostrar diferencias entre colecciones tradicionales y colecciones concurrentes cuando varios hilos modifican o recorren datos al mismo tiempo.
+[![Java](https://img.shields.io/badge/Java-17%2B-blue?logo=openjdk)](https://openjdk.org/)
+[![Maven](https://img.shields.io/badge/Maven-3.9%2B-C71A36?logo=apachemaven)](https://maven.apache.org/)
+[![Tests](https://img.shields.io/badge/Tests-198%20passing-success)](https://github.com/cazucito/thread-safe-collections/actions)
+[![Coverage](https://img.shields.io/badge/Coverage-89.8%25-success)](https://github.com/cazucito/thread-safe-collections)
+[![License](https://img.shields.io/badge/License-GPL%20v3.0-blue)](LICENSE)
 
-Versión actual para estudio: `1.0.0`
+> **PoC educativa profesional** sobre colecciones seguras en ambientes multihilo con Java. Aprende mediante demostraciones interactivas, benchmarks científicos y guías prácticas.
 
-## Requisitos
+[![Docs](https://img.shields.io/badge/Documentation-GitHub%20Pages-222?logo=github)](https://cazucito.github.io/thread-safe-collections/)
 
-- JDK 17 o superior
-- Maven 3.9 o superior
+## ✨ Características
 
-## Estructura del proyecto
+- 📚 **9 Demos Interactivas** - Desde ArrayList básico hasta LongAdder
+- ⚡ **Benchmarks JMH** - Mediciones científicas de rendimiento
+- 🎯 **Guía de Decisión** - Árbol de decisión para elegir colecciones
+- ✅ **89.8% Cobertura** - Tests unitarios e integración
+- 🚀 **Multiplataforma** - Windows, Linux, macOS
+- 📖 **Documentación** - Sitio profesional en GitHub Pages
 
-```text
-src/
-  main/
-    java/
-      io/github/cazucito/threadsafecollections/
-  test/
-    java/
-      io/github/cazucito/threadsafecollections/
-```
-
-## Cómo ejecutar
-
-Compilar el proyecto:
+## 🚀 Comienza en 30 segundos
 
 ```bash
-./mvnw compile
+# Clonar
+git clone https://github.com/cazucito/thread-safe-collections.git
+cd thread-safe-collections
+
+# Validar entorno
+./mvnw validate -Pcheck-env
+
+# Ejecutar todas las demos
+./mvnw exec:java --fast
+
+# O una demo específica
+./mvnw compile exec:java -Pdemo -Ddemo.id=concurrent-hash-map
 ```
 
-Ejecutar la aplicación:
+## 📊 Demos Disponibles
+
+| Colección | Tipo | Característica Principal |
+|-----------|------|------------------------|
+| `ArrayList` | Lista | Sincronización manual vs automática |
+| `CopyOnWriteArrayList` | Lista | Snapshot iteration sin bloqueos |
+| `CopyOnWriteArraySet` | Set | Sin duplicados, lecturas rápidas |
+| `ConcurrentHashMap` | Mapa | Lock por segmento (default choice) |
+| `ConcurrentSkipListMap` | Mapa | Ordenado concurrente O(log n) |
+| `ConcurrentSkipListSet` | Set | Ordenado sin duplicados |
+| `ConcurrentLinkedQueue` | Cola | Lock-free FIFO |
+| `ArrayBlockingQueue` | Cola | Productor/consumidor con límite |
+| `LongAdder` | Contador | Striped counters para alta contención |
+
+## 🎯 Comandos Útiles
 
 ```bash
-./mvnw exec:java
-```
-
-Listar demos disponibles:
-
-```bash
-./mvnw exec:java -Dexec.args="--list"
-```
-
-Ejecutar una demo puntual:
-
-```bash
-./mvnw exec:java -Dexec.args="--demo basic-collection"
-```
-
-Ejecutar una demo con depuración:
-
-```bash
-./mvnw exec:java -Dexec.args="--debug --demo concurrent-hash-map"
-```
-
-Ejecutar en modo rápido para clase, CI o revisión:
-
-```bash
-./mvnw exec:java -Dexec.args="--fast --demo basic-collection"
-```
-
-Ejecutar las pruebas:
-
-```bash
+# Tests (198 tests, 89.8% cobertura)
 ./mvnw test
+
+# Listar demos
+./mvnw exec:java -Dexec.args="--list"
+
+# Ejecutar demo con salida JSON
+./mvnw exec:java -Dexec.args="--format json --demo concurrent-hash-map"
+
+# Benchmarks JMH
+./mvnw jmh:benchmark
+
+# Crear nueva demo
+./mvnw compile exec:java -Pnew-demo
 ```
 
-## Demos incluidas
+## 📚 Documentación
 
-- Comparación entre `ArrayList` no sincronizado, acceso sincronizado manual y `Collections.synchronizedList(...)`
-- `CopyOnWriteArrayList`
-- `CopyOnWriteArraySet`
-- `ConcurrentSkipListSet`
-- `ConcurrentSkipListMap`
-- `ConcurrentHashMap`
+- 📖 **[Documentación Completa](https://cazucito.github.io/thread-safe-collections/)** - Guías, demos y benchmarks
+- 🎯 **[Guía de Decisión](https://cazucito.github.io/thread-safe-collections/guides/decision-guide/)** - ¿Qué colección usar?
+- 📊 **[Benchmarks](https://cazucito.github.io/thread-safe-collections/benchmarks/)** - Resultados de rendimiento
 
-## Ruta sugerida para estudiantes
+## 🏗️ Arquitectura
 
-1. Ejecutar `basic-collection` para observar el problema base.
-2. Continuar con `copy-on-write-array-list` y `copy-on-write-array-set`.
-3. Seguir con `concurrent-skip-list-set` y `concurrent-skip-list-map`.
-4. Cerrar con `concurrent-hash-map` como alternativa práctica común.
+```
+thread-safe-collections/
+├── src/main/java/
+│   └── io/github/cazucito/threadsafecollections/
+│       ├── demo/                    # 9 implementaciones de Demo
+│       ├── cli/                     # CLI y herramientas
+│       ├── concurrency/             # Utilidades de concurrencia
+│       └── format/                  # Formateadores (JSON/Console)
+├── src/test/java/
+│   └── benchmark/                   # Benchmarks JMH
+├── docs/                            # Documentación MkDocs
+└── .github/workflows/               # CI/CD (GitHub Actions)
+```
 
-## Criterios de esta versión
+## 🎓 Para Estudiantes
 
-- Todas las demos registradas tienen pruebas de humo automatizadas.
-- La CLI ofrece modo rápido con `--fast` para acelerar sesiones de clase y CI.
-- La salida en consola incluye objetivo, observación esperada y conclusión por demo.
-- La integración continua valida el proyecto en JDK 17 y JDK 21.
+**Ruta de aprendizaje sugerida:**
 
-## Convenciones del repositorio
+1. **`basic-collection`** - Observa el problema de concurrencia
+2. **`copy-on-write-array-list`** - Entiende snapshot iteration
+3. **`concurrent-hash-map`** - El estándar de facto para mapas
+4. **`concurrent-linked-queue`** - Estructuras lock-free
+5. **`long-adder`** - Contadores de alta frecuencia
 
-- Código en inglés
-- Comentarios y documentación en español neutro
-- Build reproducible con Maven
+## 🔬 Benchmarks
 
-## Documentación
+Comparaciones de rendimiento con JMH (Java Microbenchmark Harness):
 
-- Índice técnico: [docs/README.md](docs/README.md)
-- Guía de estudio para estudiantes: [docs/student-study-guide.md](docs/student-study-guide.md)
-- Plan de evolución del repositorio: [docs/roadmap/repository-evolution-plan.md](docs/roadmap/repository-evolution-plan.md)
-- Historial de cambios: [CHANGELOG.md](CHANGELOG.md)
+- **MapBenchmark** - HashMap vs ConcurrentHashMap
+- **ListBenchmark** - ArrayList vs CopyOnWriteArrayList
+- **QueueBenchmark** - Colas concurrentes
+- **CounterBenchmark** - AtomicLong vs LongAdder
 
-## Contribución
+Ejecutar: `./mvnw jmh:benchmark`
 
-La guía de contribución se encuentra en [CONTRIBUCION.md](CONTRIBUCION.md).
+## 🛠️ Desarrollo
 
-## Licencia
+### Requisitos
+- Java 17+ (recomendado 21 LTS)
+- Maven 3.9+ (o usar Maven Wrapper incluido)
 
-Este proyecto se distribuye bajo la licencia GNU General Public License v3.0. Consulta [LICENSE](LICENSE) para más detalles.
+### Validar entorno
+```bash
+./mvnw validate -Pcheck-env
+```
+
+### Compilar y testear
+```bash
+./mvnw clean verify
+```
+
+## 📝 Convenciones
+
+- Código en **inglés**
+- Documentación en **español neutro**
+- Commits con [Conventional Commits](https://www.conventionalcommits.org/)
+- Build reproducible con Maven Wrapper
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Lee [CONTRIBUCION.md](CONTRIBUCION.md) para empezar.
+
+## 📄 Licencia
+
+[GNU General Public License v3.0](LICENSE) © 2026 cazucito
+
+---
+
+<p align="center">
+  <a href="https://cazucito.github.io/thread-safe-collections/">📖 Documentación</a> •
+  <a href="https://github.com/cazucito/thread-safe-collections/issues">🐛 Reportar Issues</a> •
+  <a href="https://github.com/cazucito/thread-safe-collections/discussions">💬 Discussions</a>
+</p>
