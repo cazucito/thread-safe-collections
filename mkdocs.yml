@@ -66,8 +66,6 @@ plugins:
         - en
   - minify:
       minify_html: true
-  - social:
-      cards: true
 
 # Markdown extensions
 markdown_extensions:
@@ -121,18 +119,6 @@ nav:
   - Guía Rápida:
     - guides/quickstart.md
     - guides/installation.md
-    - guides/usage.md
-  - Demos:
-    - demos/index.md
-    - demos/basic-collection.md
-    - demos/copy-on-write.md
-    - demos/concurrent-maps.md
-    - demos/concurrent-sets.md
-    - demos/queues.md
-    - demos/counters.md
+  - Demos: demos/index.md
   - Guía de Decisión: guides/decision-guide.md
   - Benchmarks: benchmarks/index.md
-  - Referencia:
-    - guides/architecture.md
-    - guides/api-reference.md
-  - Contribuir: guides/contributing.md

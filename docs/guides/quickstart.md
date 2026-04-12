@@ -62,10 +62,10 @@ Verás 198 tests ejecutándose con cobertura del 89.8%.
 
 ## ¿Qué sigue?
 
-- Explora las [demos disponibles](../demos/)
-- Lee la [guía de decisión](../guides/decision-guide.md) para elegir colecciones
-- Revisa los [benchmarks](../benchmarks/) para comparar rendimiento
+- Explora las demos disponibles
+- Lee la guía de decisión para elegir colecciones
+- Revisa los benchmarks para comparar rendimiento
 
 ---
 
-¿Problemas? Consulta la [guía de instalación detallada](installation.md).
+¿Problemas? Consulta la guía de instalación detallada.

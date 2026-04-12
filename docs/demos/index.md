@@ -2,53 +2,28 @@
 
 Esta sección contiene 9 demostraciones interactivas de colecciones concurrentes en Java. Cada demo incluye código fuente, explicación pedagógica y ejercicios sugeridos.
 
-## 📚 Índice de Demos
+## 📚 Demos Disponibles
 
-<div class="grid cards" markdown>
+### Colecciones Básicas
+- **basic-collection** - ArrayList sincronizado vs no sincronizado
 
--   :material-format-list-bulleted:{ .lg .middle } **Colecciones Básicas**
+### Copy-on-Write
+- **copy-on-write-array-list** - Iteración snapshot sin bloqueos
+- **copy-on-write-array-set** - Set con copy-on-write
 
-    ---
+### Mapas Concurrentes
+- **concurrent-hash-map** - Mapa lock por segmento
+- **concurrent-skip-list-map** - Mapa ordenado concurrente
 
-    [basic-collection](basic-collection.md) - ArrayList sincronizado vs no sincronizado
+### Sets Concurrentes
+- **concurrent-skip-list-set** - Set ordenado sin duplicados
 
--   :material-content-copy:{ .lg .middle } **Copy-on-Write**
+### Colas Concurrentes
+- **concurrent-linked-queue** - Cola lock-free FIFO
+- **array-blocking-queue** - Productor/consumidor con límite
 
-    ---
-
-    [copy-on-write-array-list](copy-on-write.md) - Iteración snapshot sin bloqueos
-    
-    [copy-on-write-array-set](copy-on-write.md) - Set con copy-on-write
-
--   :material-map:{ .lg .middle } **Mapas Concurrentes**
-
-    ---
-
-    [concurrent-hash-map](concurrent-maps.md) - Mapa lock por segmento
-    
-    [concurrent-skip-list-map](concurrent-maps.md) - Mapa ordenado concurrente
-
--   :material-set-center:{ .lg .middle } **Sets Concurrentes**
-
-    ---
-
-    [concurrent-skip-list-set](concurrent-sets.md) - Set ordenado sin duplicados
-
--   :material-queue:{ .lg .middle } **Colas Concurrentes**
-
-    ---
-
-    [concurrent-linked-queue](queues.md) - Cola lock-free FIFO
-    
-    [array-blocking-queue](queues.md) - Productor/consumidor con límite
-
--   :material-counter:{ .lg .middle } **Contadores**
-
-    ---
-
-    [long-adder](counters.md) - Contadores de alta frecuencia
-
-</div>
+### Contadores
+- **long-adder** - Contadores de alta frecuencia
 
 ## 🎯 Cómo ejecutar las demos
 
@@ -80,16 +55,16 @@ Cada demo sigue un formato consistente:
 
 Si eres nuevo en colecciones concurrentes, sigue este orden:
 
-1. **Básico**: [basic-collection](basic-collection.md) - Entiende el problema
-2. **Listas**: [copy-on-write-array-list](copy-on-write.md) - Snapshot iteration
-3. **Mapas**: [concurrent-hash-map](concurrent-maps.md) - El estándar de facto
-4. **Colas**: [concurrent-linked-queue](queues.md) - Lock-free structures
-5. **Avanzado**: [long-adder](counters.md) - Striped counters
+1. **Básico**: `basic-collection` - Entiende el problema
+2. **Listas**: `copy-on-write-array-list` - Snapshot iteration
+3. **Mapas**: `concurrent-hash-map` - El estándar de facto
+4. **Colas**: `concurrent-linked-queue` - Lock-free structures
+5. **Avanzado**: `long-adder` - Striped counters
 
 ## 📊 Benchmarks
 
-Cada demo tiene benchmarks JMH asociados en la sección [Benchmarks](../benchmarks/).
+Cada demo tiene benchmarks JMH asociados. Ver la sección de Benchmarks.
 
 ---
 
-¿Listo para comenzar? Recomendamos empezar con [Colecciones Básicas](basic-collection.md).
+¿Listo para comenzar? Ejecuta `./mvnw exec:java -Dexec.args="--list"` para ver todas las opciones.
