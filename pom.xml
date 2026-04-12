@@ -6,7 +6,7 @@
 
     <groupId>io.github.cazucito</groupId>
     <artifactId>thread-safe-collections</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>thread-safe-collections</name>
     <description>PoC educativa sobre colecciones seguras en ambientes multihilo</description>
 
